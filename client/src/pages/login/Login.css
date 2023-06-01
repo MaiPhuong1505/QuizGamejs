@@ -1,0 +1,78 @@
+.background {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #bfe7ff;
+  /* fallback for non-supported browsers */
+  background: linear-gradient(to bottom right, #bfe7ff, #4ec9f5, #66e1fe);
+  overflow: hidden;
+  position: relative;
+}
+
+.background a {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+  color: #00B8F1;
+  cursor: pointer;
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+.bubble {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+.bubble:nth-child(2) {
+  left: 85vw;
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+}
+
+.bubble:nth-child(3) {
+  top: 150px;
+  left: -25px;
+  width: 200px;
+  height: 200px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.bubble:nth-child(4) {
+  top: 70vh;
+  left: 30vw;
+  width: 150px;
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.bubble:nth-child(5) {
+  top: 80vh;
+  left: 75vw;
+  width: 120px;
+  height: 120px;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.bubble:nth-child(6) {
+  top: 65vh;
+  left: 80vw;
+  width: 250px;
+  height: 250px;
+}
+
+.bubble:nth-child(7) {
+  top: -100px;
+  left: 40vw;
+  width: 180px;
+  height: 180px;
+}

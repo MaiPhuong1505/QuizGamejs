@@ -3,18 +3,16 @@ import Quiz from '../models/quizModel.js';
 const quizController = {
   createQuiz: async (req, res) => {
     try {
-      const { title, description, visibility, category, numberOfQuestions, user } = req.body;
-      const newQuiz = { title, description, visibility, category, numberOfQuestions, user };
-      const imageURL = req.body.imageURL;
-      if (imageURL) {
-        newQuiz = { ...newQuiz, imageURL };
-      }
-      await Quiz.create(newQuiz);
+      const { title, description, visibility, category, numberOfQuestions, user, imageURL } = req.body;
+      const newQuiz = { title, description, visibility, category, numberOfQuestions, user, imageURL };
+
+      const insertedQuiz = await Quiz.create(newQuiz);
 
       res.json({
         msg: 'Created quiz!',
         newQuiz: {
           ...newQuiz,
+          quizId: insertedQuiz._id,
           user: req.user,
         },
       });
@@ -51,7 +49,7 @@ const quizController = {
     try {
       const { title, description, visibility, category, numberOfQuestions, imageURL } = req.body;
       const newQuiz = { title, description, visibility, category, numberOfQuestions, imageURL };
-      const quiz = await Quiz.findOneAndUpdate({ _id: req.params.quizId }, newQuiz);
+      const quiz = await Quiz.findOneAndUpdate({ _id: req.params.quizId }, newQuiz, { new: true });
 
       res.json({
         msg: `Updated Quiz`,

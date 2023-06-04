@@ -2,18 +2,17 @@ import mongoose from 'mongoose';
 
 const questionSchema = new mongoose.Schema(
   {
-    content: { type: String, required: true },
+    question: { type: String, required: true },
     answerOptions: {
       type: [
         {
-          content: { type: String, required: true },
+          answer: { type: String, required: true },
           isCorrect: { type: Boolean, default: false, required: true },
         },
       ],
       default: [],
     },
     isMultipleAnswer: { type: Boolean, default: false },
-    numberOfQuestions: { type: String, required: true },
     time: { type: Number, default: 30, required: true },
     difficulty: { type: String, required: true },
     imageURL: { type: String },

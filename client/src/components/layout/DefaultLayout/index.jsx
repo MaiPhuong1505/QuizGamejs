@@ -1,11 +1,15 @@
 import React from 'react';
 import Header from '../Header';
+import { Box, Toolbar } from '@mui/material';
 
 const DefaultLayout = ({ children }) => {
   return (
     <>
       <Header />
-      {children}
+      <Box sx={{ padding: 4, minHeight: '100vh', boxSizing: 'border-box' }}>
+        <Toolbar />
+        {children}
+      </Box>
     </>
   );
 };

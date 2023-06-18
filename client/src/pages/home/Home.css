@@ -3,7 +3,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600&display=swap');
 
 .home {
-  margin-top: 50px;
   background-color: white;
   padding: 10px 12vw;
 }
@@ -29,7 +28,7 @@
   padding: 10px 5px;
   transform: translateY(-10px);
   text-align: center;
-  background-color: #F9F9FB;
+  background-color: #f9f9fb;
 }
 
 .intro-title {

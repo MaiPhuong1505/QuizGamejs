@@ -27,9 +27,9 @@ const QuizPage = () => {
               variant="contained"
               // onClick={handleSubmit}
             >
-              Lưu
+              Save
             </Button>
-            <Button variant="outlined">Thoát</Button>
+            <Button variant="outlined">Cancel</Button>
           </Box>
         </Grid>
       </Grid>

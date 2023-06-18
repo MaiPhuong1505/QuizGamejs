@@ -1,10 +1,11 @@
 import Quiz from '../models/quizModel.js';
+import { QUIZ_TYPE } from '../utils/constants.js';
 
 const quizController = {
   createQuiz: async (req, res) => {
     try {
-      const { title, description, visibility, category, numberOfQuestions, user, imageURL } = req.body;
-      const newQuiz = { title, description, visibility, category, numberOfQuestions, user, imageURL };
+      const { title, description, visibility, category, type, user, imageURL } = req.body;
+      const newQuiz = { title, description, visibility, category, type, user, imageURL };
 
       const insertedQuiz = await Quiz.create(newQuiz);
 
@@ -25,6 +26,7 @@ const quizController = {
       const quizzes = await Quiz.find({
         user: req.body.user,
         $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
+        type: { $in: [QUIZ_TYPE.QUIZ] },
       });
       res.json({
         msg: `All quizzes of userId ${req.body.user}`,
@@ -69,6 +71,21 @@ const quizController = {
       res.json({
         msg: `Deleted Quiz`,
         quiz,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  getQuizzesTypeFlashcard: async (req, res) => {
+    try {
+      const flashcards = await Quiz.find({
+        user: req.body.user,
+        $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
+        type: { $in: [QUIZ_TYPE.FLASHCARD] },
+      });
+      res.json({
+        msg: `All flashcards of userId ${req.body.user}`,
+        flashcards,
       });
     } catch (error) {
       return res.status(500).json({ msg: error.message });

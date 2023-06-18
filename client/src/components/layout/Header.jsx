@@ -14,7 +14,12 @@ const Header = () => {
   return (
     <AppBar
       position="fixed"
-      sx={{ flexDirection: 'inherit', background: 'white', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{
+        flexDirection: 'inherit',
+        background: 'white',
+        boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.14) 0px 0px 3px',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
     >
       <div className="container">
         <img src={MyLogo} style={{ width: 60 }} alt="Logo" />

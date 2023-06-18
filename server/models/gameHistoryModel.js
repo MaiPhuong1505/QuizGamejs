@@ -5,6 +5,7 @@ const gameHistorySchema = new mongoose.Schema(
     quizId: { type: mongoose.Types.ObjectId, ref: 'Quiz' },
     numberOfPlayers: { type: Number, required: true },
     numberOfQuestions: { type: Number, required: true },
+    hostId: { type: mongoose.Types.ObjectId, ref: 'User' },
   },
   { timestamps: true },
 );

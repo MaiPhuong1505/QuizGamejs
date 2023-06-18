@@ -1,0 +1,48 @@
+.waiting-player {
+  width: 100%;
+  height: 100%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px;
+
+    .right {
+      .MuiButton-root {
+        margin-left: 16px;
+      }
+
+      .lock-btn {
+        scale: 0.75;
+      }
+    }
+  }
+
+  .content {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .player-inner {
+      display: flex;
+
+      .player {
+        border: 0;
+        padding: 8px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 1.2em;
+        color: #fff;
+        background: #823885;
+        box-shadow: 0 3px 1px #823885;
+      }
+    }
+  }
+}

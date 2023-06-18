@@ -1,0 +1,70 @@
+.result {
+  background-size: cover;
+  width: 100%;
+  background: #ebedff;
+  height: 100vh;
+
+  .result-inner {
+    display: flex;
+    background: #ebedff url('../../assets/podium small.png') no-repeat center center;
+    height: 900px;
+    align-items: center;
+    flex-direction: column;
+
+    .result-rank {
+      height: 940px;
+      display: flex;
+      padding-top: 212px;
+      justify-content: space-between;
+      width: 1200px;
+
+      .player {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 80px;
+        line-height: 97px;
+        color: #4b56a2;
+      }
+
+      .player-score {
+        margin-top: 24px;
+        width: 100%;
+        background: #4b56a2;
+        border-radius: 15px;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 80px;
+        line-height: 97px;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+      }
+
+      .result-rank-first {
+        padding-top: 64px;
+      }
+
+      .result-rank-third {
+        padding-top: 100px;
+      }
+    }
+  }
+  .result-score {
+    margin-top: -5%;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 87px;
+    align-items: center;
+    text-align: center;
+    color: #4b56a2;
+    background: #ebedff;
+
+    p {
+      margin: 12px 0;
+    }
+  }
+}

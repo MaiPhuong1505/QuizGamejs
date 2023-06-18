@@ -5,6 +5,12 @@
   justify-content: center;
 }
 
-/* .App-link {
-  color: #61dafb;
-} */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}

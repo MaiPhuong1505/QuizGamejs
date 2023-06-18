@@ -4,6 +4,7 @@ import cors from 'cors';
 import userRouter from './routes/userRouter.js';
 import quizRouter from './routes/quizRouter.js';
 import questionRouter from './routes/questionRouter.js';
+import categoryRouter from './routes/categoryRouter.js';
 // import cookieParser from 'cookie-parser';
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cors(corsOptions));
 app.use('/api', userRouter);
 app.use('/api', quizRouter);
 app.use('/api', questionRouter);
+app.use('/api', categoryRouter);
 
 app.listen(5000, () => {
   try {

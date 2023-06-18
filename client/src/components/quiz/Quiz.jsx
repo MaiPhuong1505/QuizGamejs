@@ -10,7 +10,7 @@ const Quiz = () => {
   };
   return (
     <>
-      <Paper elevation={3} sx={{ padding: 2 }}>
+      <Paper sx={{ padding: 2 }}>
         <Stack>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h5">Quiz Name</Typography>

@@ -7,10 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const { user } = useSelector((state) => {
-    console.log('state', state);
-    return state;
-  });
+  const { user } = useSelector((state) => state);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -22,7 +19,7 @@ const Home = () => {
   };
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Grid container className="home">
         <Grid item xs={8}>
           <Typography className="brand-home" color="primary" variant="h3">

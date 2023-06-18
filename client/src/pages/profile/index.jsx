@@ -1,5 +1,5 @@
 import React from 'react';
-import Quiz from '../../components/quiz';
+import Quiz from '../../components/quiz/Quiz';
 import { Box, Button, Divider, Grid, IconButton, Paper, Stack, Toolbar, Typography } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,18 +12,13 @@ const Profile = () => {
 
   const navigate = useNavigate();
   const createQuiz = () => {
-    navigate('/quiz');
+    navigate('/createQuiz');
   };
   return (
     <>
-      <Toolbar />
-      <Grid
-        container
-        spacing={6}
-        sx={{ backgroundColor: '#FAFAFA', padding: 4, minHeight: '100vh', boxSizing: 'border-box' }}
-      >
+      <Grid container spacing={6} sx={{ backgroundColor: '#FAFAFA' }}>
         <Grid item xs={4}>
-          <Paper elevation={3} sx={{ padding: 2, maxWidth: '300px' }}>
+          <Paper sx={{ padding: 2, maxWidth: '300px' }}>
             <Stack spacing={2}>
               <Typography variant="h6" color="primary">
                 User Profile

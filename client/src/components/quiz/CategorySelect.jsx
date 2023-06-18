@@ -1,26 +1,35 @@
 import { InputLabel, ListItemText, MenuItem, Select, FormControl } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { categoryServices } from '../../services/categoryServices';
+import { useSelector } from 'react-redux';
 
 const CategorySelect = ({ getData, categoryId }) => {
-  const initList = [
-    { _id: '646eccb1d932a3a34d3dd36f', categoryName: 'Math' },
-    { _id: '646ecce4d932a3a34d3dd370', categoryName: 'IT' },
-    { _id: '646eccfdd932a3a34d3dd371', categoryName: 'History' },
-    { _id: '646ecd0bd932a3a34d3dd372', categoryName: 'Literature' },
-    { _id: '646ecd1ad932a3a34d3dd373', categoryName: 'English' },
-  ];
-  const [selectedCategory, setSelectedCategory] = useState(categoryId);
-  const [categoryList, setCategoryList] = useState(initList);
+  const { user } = useSelector((state) => state);
 
-  // const getFoodCategories = async (token) => {
-  //   const response = await storeServices.getFoodCategories(token)
-  //   if (response.data) {
-  //     setCategoryList(response.data)
-  //   }
-  // }
-  // useEffect(() => {
-  //   getFoodCategories(token)
-  // }, [])
+  const [selectedCategory, setSelectedCategory] = useState(categoryId);
+  const [categoryList, setCategoryList] = useState([]);
+
+  const getCategories = async (token) => {
+    try {
+      const response = await categoryServices.getCategories(token);
+      console.log('response', response);
+      const categories = response.data.categories;
+      if (categories) {
+        //display 'Other' category in the last of list
+        const otherIndex = categories.indexOf('Other');
+        if (otherIndex !== -1) {
+          const other = categories.splice(otherIndex, 1);
+          categories.push(other[0]);
+        }
+        setCategoryList(categories);
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+  useEffect(() => {
+    getCategories(user.token);
+  }, []);
 
   const handleChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -29,16 +38,16 @@ const CategorySelect = ({ getData, categoryId }) => {
   return (
     <>
       <FormControl sx={{ width: '100%' }} size="small">
-        <InputLabel id="demo-select-small">Danh mục</InputLabel>
+        <InputLabel id="category-select"></InputLabel>
         {categoryList.length > 0 && (
           <Select
             sx={{ width: '100%' }}
-            labelId="demo-select-small"
-            id="demo-select-small"
+            labelId="category-select"
+            id="category-select"
             size="small"
             value={selectedCategory || ''}
             onChange={handleChange}
-            label={'Danh mục'}
+            label=""
           >
             {categoryList.map((value) => (
               <MenuItem key={value._id} value={value._id}>

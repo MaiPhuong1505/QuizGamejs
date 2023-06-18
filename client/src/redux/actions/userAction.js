@@ -72,7 +72,7 @@ export const register = (data) => async (dispatch) => {
       },
     });
 
-    localStorage.setItem('firstLogin', true);
+    localStorage.setItem('logged in', true);
     dispatch({
       type: GLOBALTYPES.ALERT,
       payload: {

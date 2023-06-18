@@ -1,35 +1,35 @@
-import http from './http';
+import axiosInstance from './axiosInstance';
 
 export const getDataAPI = async (url, token) => {
-  const res = await http.get(`api/${url}`, {
+  const res = await axiosInstance.get(`api/${url}`, {
     headers: { Authorization: token },
   });
   return res;
 };
 
-export const postDataAPI = async (url, post, token) => {
-  const res = await http.post(`/api/${url}`, post, {
+export const postDataAPI = async (url, data, token) => {
+  const res = await axiosInstance.post(`/api/${url}`, data, {
     headers: { Authorization: token },
   });
   return res;
 };
 
-export const putDataAPI = async (url, post, token) => {
-  const res = await http.put(`/api/${url}`, post, {
+export const putDataAPI = async (url, data, token) => {
+  const res = await axiosInstance.put(`/api/${url}`, data, {
     headers: { Authorization: token },
   });
   return res;
 };
 
-export const patchDataAPI = async (url, post, token) => {
-  const res = await http.patch(`/api/${url}`, post, {
+export const patchDataAPI = async (url, data, token) => {
+  const res = await axiosInstance.patch(`/api/${url}`, data, {
     headers: { Authorization: token },
   });
   return res;
 };
 
 export const deleteDataAPI = async (url, token) => {
-  const res = await http.delete(`/api/${url}`, {
+  const res = await axiosInstance.delete(`/api/${url}`, {
     headers: { Authorization: token },
   });
   return res;

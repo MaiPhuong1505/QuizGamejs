@@ -29,6 +29,7 @@ const Login = () => {
     return false;
   };
   const handleChangeInput = (e) => {
+    setNotifyText('');
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };

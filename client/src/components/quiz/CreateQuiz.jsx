@@ -18,7 +18,7 @@ import CategorySelect from './CategorySelect';
 import UploadImage from '../UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowBack, Save } from '@mui/icons-material';
-import { QUIZ_VISIBILITY } from '../../utils/contants';
+import { QUIZ_VISIBILITY } from '../../utils/constants';
 const CreateQuiz = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);

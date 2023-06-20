@@ -1,0 +1,41 @@
+.MuiPaper-root.game-header {
+  background-color: white;
+  height: 12vh;
+  color: black;
+
+  .container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 8px;
+    justify-content: space-between;
+  }
+
+  .question {
+    color: black;
+    font-weight: 400;
+    font-size: 24px;
+  }
+
+  .title {
+    background-color: white;
+    color: black;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .time {
+    &-count {
+      width: 120px;
+      font-size: 28px;
+      height: 50px;
+      color: white;
+      border: 8px solid #ffe274;
+      background: black;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

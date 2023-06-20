@@ -1,0 +1,93 @@
+.answer-inner {
+  display: flex;
+  padding: 0 120px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .answer {
+    width: 47%;
+    margin-bottom: 44px;
+
+    &-item {
+      width: 100%;
+      display: flex;
+      background: #d9f6ff;
+      height: 125px;
+      border: 1px solid #00b8f1;
+      border-radius: 10px;
+
+      .answer-icon {
+        border-right: 1px solid #00b8f1;
+        width: 125px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .answer-text {
+        font-size: 32px;
+        vertical-align: middle;
+        margin: auto 24px;
+      }
+    }
+
+    &-item.disable {
+      color: rgba(0, 0, 0, 0.45);
+      background: rgba(217, 246, 255, 0.45);
+      border: 1px solid rgba(0, 184, 241, 0.45);
+
+      .answer-icon {
+        border-right: 1px solid rgba(0, 184, 241, 0.45);
+
+        svg {
+          path {
+            fill: rgba(0, 184, 241, 0.45);
+          }
+
+          rect {
+            fill: rgba(0, 184, 241, 0.45);
+          }
+        }
+      }
+    }
+
+    &-item.in-correct {
+      scale: 1;
+      background: #ffb6b3;
+      border: 1px solid #ff6962;
+      .answer-icon {
+        border-right: 1px solid #ff6962;
+
+        svg {
+          path {
+            fill: #ff6962;
+          }
+
+          rect {
+            fill: #ff6962;
+          }
+        }
+      }
+    }
+
+    &-item.correct {
+      scale: 1.05;
+      background: #bde7bd;
+      border: 1px solid #77dd76;
+
+      .answer-icon {
+        border-right: 1px solid #77dd76;
+
+        svg {
+          path {
+            fill: #77dd76;
+          }
+
+          rect {
+            fill: #77dd76;
+          }
+        }
+      }
+    }
+  }
+}

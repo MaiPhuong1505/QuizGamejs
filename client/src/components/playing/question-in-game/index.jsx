@@ -8,7 +8,7 @@ const QuestionInGame = ({ progress, role, answersChart }) => {
   const isCorrect = false;
 
   const isAnswerTime = progress === PLAYING_PROGRESS.ANSWER_TIME;
-  const isAdminResult = progress === PLAYING_PROGRESS.SHOW_RESULT && role === ROLE.ADMIN;
+  const isAdminResult = progress === PLAYING_PROGRESS.SHOW_RESULT && role === ROLE.HOST;
   const isPlayerResult = progress === PLAYING_PROGRESS.SHOW_RESULT && role === ROLE.PLAYER;
 
   return (

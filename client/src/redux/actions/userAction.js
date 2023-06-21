@@ -4,6 +4,7 @@ import { postDataAPI } from '../../utils/fetchData';
 export const login = (data) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: true } });
+    console.log('login');
     const res = await postDataAPI('login', data);
     console.log('data login', res);
     dispatch({

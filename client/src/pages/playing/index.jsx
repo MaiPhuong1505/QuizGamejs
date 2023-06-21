@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Playing.scss';
 import { ANSWER_TYPE, PLAYING_PROGRESS, ROLE } from '../../utils/constants';
 import GameHeader from '../../components/game-header';
@@ -6,11 +6,22 @@ import ButtonControl from '../../components/playing/button-control';
 import WaitingPlayer from '../../components/playing/waiting-player';
 import QuestionInGame from '../../components/playing/question-in-game';
 import Answer from '../../components/playing/answer';
+import { socket } from '../../socketClient';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { quizServices } from '../../services/quizServices';
 
 const Playing = () => {
-  const [progress, setProgress] = React.useState(PLAYING_PROGRESS.SHOW_RESULT);
-  const [role, setRole] = React.useState(ROLE.ADMIN);
-  const [answersChart, setAnswersChart] = React.useState([
+  const { user } = useSelector((state) => state);
+  const { id } = useParams();
+
+  const [pinCode, setPinCode] = useState('');
+  const [progress, setProgress] = useState(PLAYING_PROGRESS.WAITING_PLAYER);
+  const [role, setRole] = useState(ROLE.PLAYER);
+  const [quiz, setQuiz] = useState({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questionList, setQuestionList] = useState([]);
+  const [answersChart, setAnswersChart] = useState([
     {
       percent: '60%',
       type: ANSWER_TYPE.SQUARE,
@@ -33,7 +44,7 @@ const Playing = () => {
     },
   ]);
 
-  const [answers, setAnswers] = React.useState([
+  const [answers, setAnswers] = useState([
     {
       answer: 'Lorem ipsum dolor sit amet.',
       isSelected: false,
@@ -68,10 +79,50 @@ const Playing = () => {
 
   const isWaitingPlayer = progress === PLAYING_PROGRESS.WAITING_PLAYER;
 
+  const changeStartStatus = (status) => {
+    setProgress(status);
+  };
+
+  useEffect(() => {
+    socket.emit('Get_PIN_code_from_server', (code) => {
+      setPinCode(code);
+    });
+  }, []);
+  useEffect(() => {
+    const getQuizById = async (id, token) => {
+      try {
+        const response = await quizServices.getQuizById(id, token);
+        console.log('response', response.data);
+        if (response.data.quiz) {
+          setQuiz(response.data.quiz);
+          setQuestionList(response.data.quiz.questions);
+        }
+      } catch (error) {
+        console.log('getQuizById', error);
+      }
+    };
+    if (user.token && id) {
+      console.log(1);
+      setRole(ROLE.HOST);
+      getQuizById(id, user.token);
+    }
+  }, []);
+  useEffect(() => {
+    if (quiz.questions) {
+      setQuestionList(quiz.questions);
+    }
+  }, [quiz]);
+  console.log(quiz, questionList[currentQuestionIndex]);
   return (
     <div className="playing">
-      <GameHeader progress={progress} />
-      <ButtonControl progress={progress} role={role} />
+      <GameHeader
+        progress={progress}
+        pinCode={pinCode}
+        quiz={quiz}
+        time={questionList[currentQuestionIndex]?.time}
+        currentIndex={currentQuestionIndex}
+      />
+      <ButtonControl progress={progress} role={role} startFunc={changeStartStatus} />
       {isWaitingPlayer ? (
         <WaitingPlayer />
       ) : (

@@ -1,3 +1,4 @@
+import Question from '../models/questionModel.js';
 import Quiz from '../models/quizModel.js';
 import { QUIZ_TYPE } from '../utils/constants.js';
 
@@ -73,7 +74,7 @@ const quizController = {
   getQuizzes: async (req, res) => {
     try {
       const quizzes = await Quiz.find({
-        user: req.body.user,
+        user: req.params.userId,
         $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
         type: { $in: [QUIZ_TYPE.QUIZ] },
       });
@@ -88,6 +89,9 @@ const quizController = {
   getQuizById: async (req, res) => {
     try {
       const quiz = await Quiz.findOne({ _id: req.params.quizId });
+      const questionIdList = quiz.questions;
+      const questionList = await Question.find({ _id: { $in: questionIdList } }).exec();
+      quiz.questions = questionList;
       res.json({
         msg: `Get quiz with id ${req.params.quizId}`,
         quiz,
@@ -128,7 +132,7 @@ const quizController = {
   getQuizzesTypeFlashcard: async (req, res) => {
     try {
       const flashcards = await Quiz.find({
-        user: req.body.user,
+        user: req.params.userId,
         $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
         type: { $in: [QUIZ_TYPE.FLASHCARD] },
       });

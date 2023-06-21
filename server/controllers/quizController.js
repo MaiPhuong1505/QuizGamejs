@@ -1,6 +1,20 @@
 import Quiz from '../models/quizModel.js';
 import { QUIZ_TYPE } from '../utils/constants.js';
 
+const getRandomQuestions = (questionsInQuiz, numberOfQues) => {
+  const questionsWithRandomIndex = questionsInQuiz.map((item) => {
+    console.log('item', item);
+    item = { ...item._doc, randIndex: Math.floor(Math.random() * questionsInQuiz.length) };
+    return item;
+  });
+  questionsWithRandomIndex.sort((a, b) => a.randIndex - b.randIndex);
+  questionsWithRandomIndex.slice(0, numberOfQues);
+  questionsWithRandomIndex.forEach((element) => {
+    delete element.randIndex;
+  });
+  return questionsWithRandomIndex;
+};
+
 const quizController = {
   createQuiz: async (req, res) => {
     try {
@@ -15,6 +29,41 @@ const quizController = {
           ...newQuiz,
           quizId: insertedQuiz._id,
           user: req.user,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  createQuizAuto: async (req, res) => {
+    try {
+      const { quizTitle, requirement, userId } = req.body;
+      //requirement = [{quizId, numberOfQuestions}]
+      let newQuestionList = [];
+      for (let i = 0; i < requirement.length; i++) {
+        const questions = await Question.find({
+          quizzes: { $in: [requirement[i].quizId] },
+        });
+        // console.log(questions)
+        // console.log(getRandomQuestions(questions, requirement.numberOfQuestions));
+        newQuestionList = [...getRandomQuestions(questions, requirement.numberOfQuestions)];
+      }
+      console.log('newQuestionList', newQuestionList);
+      const insertedQuiz = await Quiz.create({
+        title: quizTitle,
+        user: userId,
+        questions: newQuestionList,
+        type: ['Quiz'],
+      });
+      newQuestionList.forEach((question) => {
+        Question.updateOne({ _id: question._id }, { $push: { quizzes: insertedQuiz._id } });
+      });
+      res.json({
+        msg: 'Created quiz!',
+        newQuiz: {
+          ...insertedQuiz._doc,
+          quizId: insertedQuiz._id,
+          user: userId,
         },
       });
     } catch (error) {

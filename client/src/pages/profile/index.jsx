@@ -10,6 +10,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [quizzes, setQuizzes] = useState([]);
   const { user } = useSelector((state) => state);
+  const navigate = useNavigate();
   const getQuizList = async () => {
     try {
       const response = await quizServices.getQuizzes(user?.user?._id, user?.token);
@@ -24,7 +25,6 @@ const Profile = () => {
     getQuizList();
   }, []);
 
-  const navigate = useNavigate();
   const createQuiz = () => {
     navigate('/createQuiz');
   };
@@ -43,6 +43,9 @@ const Profile = () => {
               <Divider />
               <Button variant="contained" endIcon={<AddCircleOutline />} onClick={createQuiz}>
                 Create a new quiz
+              </Button>
+              <Button variant="contained" endIcon={<AddCircleOutline />} onClick={() => navigate('/manageQuiz')}>
+                Create quiz automatically
               </Button>
             </Stack>
           </Paper>

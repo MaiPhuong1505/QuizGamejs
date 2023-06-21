@@ -1,13 +1,13 @@
-import { Fragment, ReactNode } from 'react';
-import Quiz from '../pages/quiz';
+import CreateQuiz from '../components/quiz/CreateQuiz';
+import Game from '../pages/game';
+import GameEntry from '../pages/game-entry';
 import Home from '../pages/home';
 import Login from '../pages/login';
-import Profile from '../pages/profile';
-import Game from '../pages/game';
-import Result from '../pages/result';
+import ManageQuiz from '../pages/managequiz';
 import Playing from '../pages/playing';
-import GameEntry from '../pages/game-entry';
-import CreateQuiz from '../components/quiz/CreateQuiz';
+import Profile from '../pages/profile';
+import Quiz from '../pages/quiz';
+import Result from '../pages/result';
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -20,6 +20,7 @@ const publicRoutes = [
   { path: '/playing', component: Playing, layout: null },
   { path: '/playing/:id', component: Playing, layout: null },
   { path: '/result', component: Result, layout: null },
+  { path: '/manageQuiz', component: ManageQuiz, layout: null },
 ];
 
 const privateRoutes = [];

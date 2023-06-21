@@ -10,4 +10,7 @@ export const quizServices = {
   getQuizById: async (quizId, token) => {
     return await getDataAPI(`/quiz/${quizId}`, token);
   },
+  createQuizAutoApi: async (data, token) => {
+    return await postDataAPI(`/quiz/autoCreate`, data, token);
+  },
 };

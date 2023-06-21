@@ -3,17 +3,17 @@ import { Box, Button, Divider, IconButton, Paper, Stack, Typography } from '@mui
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Quiz = () => {
+const Quiz = ({ quiz }) => {
   const navigate = useNavigate();
   const play = () => {
-    navigate('/game');
+    navigate(`/playing/${quiz._id}`);
   };
   return (
     <>
       <Paper sx={{ padding: 2 }}>
         <Stack>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="h5">Quiz Name</Typography>
+            <Typography variant="h5">{quiz.title}</Typography>
             <Box sx={{ '& button': { mr: 1 } }}>
               <Button variant="contained" endIcon={<PlayCircleOutline />} onClick={play}>
                 Play
@@ -27,8 +27,8 @@ const Quiz = () => {
             </Box>
           </Box>
           <Divider sx={{ margin: '16px 0' }} />
-          <Typography>Quiz Topic</Typography>
-          <Typography>Number of question</Typography>
+          <Typography>{quiz.description}</Typography>
+          <Typography>{quiz.questions.length === 1 ? '1 question' : `${quiz.questions.length} questions`} </Typography>
         </Stack>
       </Paper>
     </>

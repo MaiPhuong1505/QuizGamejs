@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Typography } from '@mui/material';
 import './GameHeader.scss';
 import { PLAYING_PROGRESS } from '../../utils/constants';
-const GameHeader = ({ progress }) => {
-  const isHidden = progress !== PLAYING_PROGRESS.WAITING_PLAYER;
+import { socket } from '../../socketClient';
+const GameHeader = ({ progress, pinCode, quiz, time, currentIndex }) => {
+  const isDiplay = progress === PLAYING_PROGRESS.ANSWER_TIME;
+
   return (
     <AppBar position="fixed" className="game-header">
       <div className="container">
         {/* <div className="question">{isHidden && 'Question: 1/10'}</div> */}
-        <Typography className="question">{isHidden && 'Question: 1/10'}</Typography>
-        <Typography className="title">Welcome, your ID room is: 787897</Typography>
-        <div className="time">{isHidden && <div className="time-count">00:00</div>}</div>
+        <Typography className="question">
+          {isDiplay && `Question: ${currentIndex + 1}/${quiz.questions.length}`}
+        </Typography>
+        <Typography className="title">{isDiplay ? `${quiz.title}` : `Welcome, your ID room is: ${pinCode}`}</Typography>
+        <div className="time">{isDiplay && <div className="time-count">{time}</div>}</div>
       </div>
     </AppBar>
   );

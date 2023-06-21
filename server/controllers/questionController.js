@@ -26,6 +26,17 @@ const questionController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  getQuestionById: async (req, res) => {
+    try {
+      const question = await Question.findOne({ _id: req.params.id });
+      res.json({
+        msg: `Get question with id ${req.params.quizId}`,
+        question,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
   updateQuestion: async (req, res) => {
     try {
       const { question, answerOptions, isMultipleAnswer, time, difficulty, imageURL, explaination, quiz } = req.body;

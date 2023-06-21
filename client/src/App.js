@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@emotion/react';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './components/layout';
+import { socket } from './socketClient';
 
 const theme = createTheme({
   palette: {

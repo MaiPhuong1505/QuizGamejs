@@ -15,7 +15,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ButtonControl = ({ progress, role }) => {
+const ButtonControl = ({ progress, role, startFunc }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -24,6 +24,10 @@ const ButtonControl = ({ progress, role }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleStart = () => {
+    startFunc(PLAYING_PROGRESS.ANSWER_TIME);
   };
 
   if (progress === PLAYING_PROGRESS.WAITING_PLAYER)
@@ -38,7 +42,7 @@ const ButtonControl = ({ progress, role }) => {
           <Button variant="contained" className="lock-btn">
             <Lock />
           </Button>
-          <Button variant="contained" endIcon={<NotStarted />}>
+          <Button variant="contained" endIcon={<NotStarted />} onClick={handleStart}>
             START
           </Button>
         </div>

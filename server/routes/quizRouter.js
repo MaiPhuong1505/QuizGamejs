@@ -3,6 +3,7 @@ import quizController from '../controllers/quizController.js';
 
 const quizRouter = express.Router();
 quizRouter.post('/quiz/create', quizController.createQuiz);
+quizRouter.post('/quiz/autoCreate', quizController.createQuizAuto);
 quizRouter.get('/quiz/all', quizController.getQuizzes);
 quizRouter.get('/quiz/flashcards', quizController.getQuizzesTypeFlashcard);
 quizRouter.get('/quiz/:quizId', quizController.getQuizById);

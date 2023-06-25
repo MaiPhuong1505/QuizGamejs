@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { LoadingButton } from '@mui/lab';
 import SaveIcon from '@mui/icons-material/Save';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 import React, { useEffect, useState } from 'react';
@@ -28,6 +28,7 @@ const CreateQuizAuto = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [quizTitle, setQuizTitle] = useState('');
   const { user } = useSelector((state) => state);
+  console.log('user in create auto', user);
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -50,6 +51,7 @@ const CreateQuizAuto = () => {
 
       navigate('/profile');
     } catch (error) {
+      console.log('error', error);
       navigate('/404');
     }
   };
@@ -81,7 +83,7 @@ const CreateQuizAuto = () => {
   };
 
   const handleClear = () => {
-    setQuizzes((pre) => pre.map((item) => ({ ...item, checked: false })));
+    setQuizzes((pre) => pre.map((item) => ({ ...item, checked: false, numberOfQuestion: '' })));
   };
 
   const setNumberOfQuestion = (id, number) => {
@@ -89,14 +91,12 @@ const CreateQuizAuto = () => {
   };
 
   return (
-    <Box sx={{ padding: '55px 49px', height: '60vh' }}>
+    <Box sx={{ paddingX: '55px', height: '60vh' }}>
       <Grid container sx={{ height: '100%' }} spacing={5}>
-        <Grid item md={8.5} sx={{ height: '100%' }}>
+        <Grid item md={8} sx={{ height: '100%' }}>
           <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
             <Grid item xs={2}>
-              <Typography className="question" style={{ fontSize: '32px' }}>
-                Quiz name:
-              </Typography>
+              <Typography className="question">Quiz name:</Typography>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -105,13 +105,11 @@ const CreateQuizAuto = () => {
                 onChange={(e) => {
                   setQuizTitle(e?.target?.value || '');
                 }}
+                size="small"
                 margin="dense"
                 type={'text'}
                 variant="outlined"
                 name="option1"
-                inputProps={{
-                  style: { fontSize: '32px', padding: '8px 12px' },
-                }}
               />
             </Grid>
           </Grid>
@@ -160,7 +158,7 @@ const CreateQuizAuto = () => {
             </TableBody>
           </Table>
         </Grid>
-        <Grid item md={2.5} sx={{ marginY: '100px' }}>
+        <Grid item md={4} sx={{ marginY: '100px' }}>
           <Card
             sx={{
               display: 'flex',
@@ -215,7 +213,8 @@ const CreateQuizAuto = () => {
                 <span>Save</span>
               </LoadingButton>
               <Button
-                sx={{ padding: '5px 7px', border: '1px solid #00B8F1', color: '#00B8F1', width: '100px' }}
+                variant="outlined"
+                // sx={{ padding: '5px 7px', border: '1px solid #00B8F1', color: '#00B8F1', width: '100px' }}
                 onClick={handleClear}
               >
                 CLEAR

@@ -102,7 +102,7 @@ const userController = {
           .findById(result.id)
           .select('-password')
           .populate('followers following', 'avatar username fullname followers following');
-        console.log('user', user);
+        // console.log('user', user);
         if (!user) return res.status(400).json({ msg: 'This user does not exist.' });
 
         const access_token = createAccessToken({ id: result.id });

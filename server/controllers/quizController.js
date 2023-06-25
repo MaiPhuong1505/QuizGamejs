@@ -38,7 +38,7 @@ const quizController = {
   },
   createQuizAuto: async (req, res) => {
     try {
-      const { quizTitle, requirement, userId } = req.body;
+      const { quizTitle, requirement, user } = req.body;
       //requirement = [{quizId, numberOfQuestions}]
       let newQuestionList = [];
       for (let i = 0; i < requirement.length; i++) {
@@ -52,7 +52,7 @@ const quizController = {
       console.log('newQuestionList', newQuestionList);
       const insertedQuiz = await Quiz.create({
         title: quizTitle,
-        user: userId,
+        user: user,
         questions: newQuestionList,
         type: ['Quiz'],
       });
@@ -64,7 +64,7 @@ const quizController = {
         newQuiz: {
           ...insertedQuiz._doc,
           quizId: insertedQuiz._id,
-          user: userId,
+          user: user,
         },
       });
     } catch (error) {
@@ -77,7 +77,9 @@ const quizController = {
         user: req.params.userId,
         $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
         type: { $in: [QUIZ_TYPE.QUIZ] },
-      });
+      })
+        .sort({ createdAt: 'desc' })
+        .exec();
       res.json({
         msg: `All quizzes of userId ${req.body.user}`,
         quizzes,

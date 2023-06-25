@@ -30,9 +30,9 @@ const Profile = () => {
   };
   return (
     <>
-      <Grid container spacing={6} sx={{ backgroundColor: '#FAFAFA' }}>
+      <Grid container sx={{ padding: 4, backgroundColor: '#FAFAFA' }}>
         <Grid item xs={4}>
-          <Paper sx={{ padding: 2, maxWidth: '300px' }}>
+          <Paper sx={{ padding: 2, marginRight: 4, maxWidth: '300px' }}>
             <Stack spacing={2}>
               <Typography variant="h6" color="primary">
                 User Profile
@@ -44,7 +44,7 @@ const Profile = () => {
               <Button variant="contained" endIcon={<AddCircleOutline />} onClick={createQuiz}>
                 Create a new quiz
               </Button>
-              <Button variant="contained" endIcon={<AddCircleOutline />} onClick={() => navigate('/manageQuiz')}>
+              <Button variant="contained" endIcon={<AddCircleOutline />} onClick={() => navigate('/autoCreateQuiz')}>
                 Create quiz automatically
               </Button>
             </Stack>

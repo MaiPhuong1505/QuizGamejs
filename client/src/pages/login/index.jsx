@@ -14,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
-  console.log('user', user);
+  // console.log('user', user);
   useEffect(() => {
     if (user.token) navigate('/profile');
     else navigate('/login');

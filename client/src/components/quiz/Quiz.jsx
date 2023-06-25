@@ -8,6 +8,9 @@ const Quiz = ({ quiz }) => {
   const play = () => {
     navigate(`/playing/${quiz._id}`);
   };
+  const handleEditQuiz = () => {
+    navigate(`/quiz/${quiz._id}`);
+  };
   return (
     <>
       <Paper sx={{ padding: 2 }}>
@@ -18,7 +21,7 @@ const Quiz = ({ quiz }) => {
               <Button variant="contained" endIcon={<PlayCircleOutline />} onClick={play}>
                 Play
               </Button>
-              <Button variant="outlined" endIcon={<Edit />}>
+              <Button variant="outlined" endIcon={<Edit />} onClick={handleEditQuiz}>
                 Edit
               </Button>
               <Button variant="outlined" endIcon={<Delete />} color="error">

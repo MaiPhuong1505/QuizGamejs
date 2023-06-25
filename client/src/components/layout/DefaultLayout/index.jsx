@@ -6,7 +6,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <>
       <Header />
-      <Box sx={{ padding: 4, minHeight: '100vh', boxSizing: 'border-box' }}>
+      <Box sx={{ minHeight: '100vh', boxSizing: 'border-box' }}>
         <Toolbar />
         {children}
       </Box>

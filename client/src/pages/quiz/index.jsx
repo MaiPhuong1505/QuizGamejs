@@ -6,20 +6,26 @@ import { quizServices } from '../../services/quizServices.js';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { AddCircleOutline, CheckCircle, Circle, CircleOutlined, Delete, Edit } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const QuizPage = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state);
   const [quiz, setQuiz] = useState({});
   const [questions, setQuestions] = useState([]);
+  const navigate = useNavigate();
 
-  //LIST TODO: updateQuiz
-  const handleEditQuiz = () => {}; //redirect to page update quiz
+  const handleEditQuiz = () => {
+    navigate(`/updateQuiz/${id}`);
+  }; //redirect to page update quiz
 
-  //LIST TODO: createQUestion
-  const handleCreateQuestion = () => {}; //redirect to page create question
-  //LIST TODO: updateQuestion
-  const handleEditQuestion = () => {}; //redirect to page update question
+  const handleCreateQuestion = () => {
+    navigate(`/createQuestion`);
+  }; //redirect to page create question
+
+  const handleEditQuestion = () => {
+    navigate(`/updateQuestion/${id}`);
+  }; //redirect to page update question
   useEffect(() => {
     const getQuizById = async () => {
       try {

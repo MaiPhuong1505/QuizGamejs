@@ -42,7 +42,7 @@ const UpdateQuestion = () => {
   };
 
   //LIST TODO: get question by id
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
   //LIST TODO: update question
   const handleSubmit = () => {};
 

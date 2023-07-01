@@ -19,7 +19,11 @@ import UploadImage from '../UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowBack, Save } from '@mui/icons-material';
 import { QUIZ_VISIBILITY } from '../../utils/constants';
+import { quizServices } from '../../services/quizServices';
+import { useNavigate } from 'react-router-dom';
+
 const CreateQuiz = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
   console.log('user in create quiz', user);
@@ -44,9 +48,11 @@ const CreateQuiz = () => {
   const getImageURL = (url) => {
     setImageURL(url);
   };
-  //LIST TODO: Create quiz
-  const handleSubmit = (event) => {
+  
+  const handleSubmit = async (event) => {
+
     try {
+      //validate
       const sendData = { ...quizData, imageURL, category: categoryID, user: user.user._id };
       if (!sendData.title) {
         setNotifyText('Please fill in quiz title');
@@ -60,9 +66,16 @@ const CreateQuiz = () => {
         setNotifyText('Please select visibility mode');
         return;
       }
-      dispatch();
+
+      //call api to save
+      const response = await quizServices.createQuiz(sendData,user?.token);
+      console.log(response);
+
+      //redirect
+      navigate(`/quiz/${response?.data?.newQuiz?.quizId}`);
     } catch (error) {
-      console.log(error.response);
+      console.log('error', error);
+      navigate('/404');    
     }
   };
   return (

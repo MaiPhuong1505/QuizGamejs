@@ -19,9 +19,17 @@ import {
 } from '@mui/material';
 import { RadioButtonUnchecked, Save, ArrowBack } from '@mui/icons-material';
 import UploadImage from '../UploadImage';
+import { quizServices } from '../../services/quizServices';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 const CreateQuestion = () => {
   const [questionData, setQuestionData] = useState({});
   const [notifyText, setNotifyText] = useState('');
+  const { user } = useSelector((state) => state);
+
+  const navigate = useNavigate();
+
   const handleChangeInput = (e) => {
     const answerOptionsElement = ['answerOptions', 'option0', 'option1', 'option2', 'option3'];
     let answerOptions = [];
@@ -31,13 +39,18 @@ const CreateQuestion = () => {
     const { name, value } = e.target;
     console.log('name', name, 'value', value);
     if (answerOptionsElement.includes(name)) {
-      //LIST TODO: check value of option textfield and radio button
+      
     } else {
       setQuestionData({ ...questionData, [name]: value });
     }
   };
+
   //LIST TODO: create question
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    await quizServices.createQuestion(questionData, user?.token);
+
+    navigate('')
+  };
 
   return (
     <>

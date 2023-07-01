@@ -19,7 +19,11 @@ import UploadImage from '../UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowBack, Save } from '@mui/icons-material';
 import { QUIZ_VISIBILITY } from '../../utils/constants';
-const CreateQuiz = () => {
+import { useParams } from 'react-router';
+
+const UpdateQuiz = () => {
+  const { id } = useParams();
+
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
   console.log('user in create quiz', user);
@@ -44,7 +48,13 @@ const CreateQuiz = () => {
   const getImageURL = (url) => {
     setImageURL(url);
   };
-  //LIST TODO: Create quiz
+  //LIST TODO: Get quiz by id
+  useEffect(() => {
+    try {
+    } catch (error) {}
+  }, []);
+
+  //LIST TODO: Update quiz
   const handleSubmit = (event) => {
     try {
       const sendData = { ...quizData, imageURL, category: categoryID, user: user.user._id };
@@ -180,4 +190,4 @@ const CreateQuiz = () => {
   );
 };
 
-export default CreateQuiz;
+export default UpdateQuiz;

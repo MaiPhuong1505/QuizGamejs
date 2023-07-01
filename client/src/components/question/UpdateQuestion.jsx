@@ -19,7 +19,11 @@ import {
 } from '@mui/material';
 import { RadioButtonUnchecked, Save, ArrowBack } from '@mui/icons-material';
 import UploadImage from '../UploadImage';
-const CreateQuestion = () => {
+import { useParams } from 'react-router';
+
+const UpdateQuestion = () => {
+  const { id } = useParams();
+
   const [questionData, setQuestionData] = useState({});
   const [notifyText, setNotifyText] = useState('');
   const handleChangeInput = (e) => {
@@ -163,4 +167,4 @@ const CreateQuestion = () => {
   );
 };
 
-export default CreateQuestion;
+export default UpdateQuestion;

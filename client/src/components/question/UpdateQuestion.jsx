@@ -40,7 +40,10 @@ const UpdateQuestion = () => {
       setQuestionData({ ...questionData, [name]: value });
     }
   };
-  //LIST TODO: create question
+
+  //LIST TODO: get question by id
+  useEffect(() => {}, []);
+  //LIST TODO: update question
   const handleSubmit = () => {};
 
   return (

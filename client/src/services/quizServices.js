@@ -19,4 +19,10 @@ export const quizServices = {
   createQuestion: async (data, token) => {
     return await postDataAPI('question/create', data, token);
   },
+  getQuestionById: async (questionId, token) => {
+    return await getDataAPI(`question/${questionId}`, token);
+  },
+  updateQuestion: async (questionId, data, token) => {
+    return await putDataAPI(`quiz/${questionId}`, data, token);
+  },
 };

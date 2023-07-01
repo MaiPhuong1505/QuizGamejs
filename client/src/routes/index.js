@@ -10,6 +10,7 @@ import QuizPage from '../pages/quiz';
 import FlashCard from '../pages/flash-card';
 import Quiz from '../pages/quiz';
 import Result from '../pages/result';
+import CreateQuestion from '../components/question/CreateQuestion';
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -24,6 +25,7 @@ const publicRoutes = [
   { path: '/result', component: Result, layout: null },
   { path: '/autoCreateQuiz', component: CreateQuizAuto },
   { path: '/flashcard', component: FlashCard },
+  { path: '/question', component: CreateQuestion },
 ];
 
 const privateRoutes = [];

@@ -5,7 +5,7 @@ import CreateQuestion from '../../components/question/CreateQuestion.jsx';
 import { quizServices } from '../../services/quizServices.js';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { CheckCircle, Circle, CircleOutlined, Delete, Edit } from '@mui/icons-material';
+import { AddCircleOutline, CheckCircle, Circle, CircleOutlined, Delete, Edit } from '@mui/icons-material';
 
 const QuizPage = () => {
   const { id } = useParams();
@@ -61,16 +61,28 @@ const QuizPage = () => {
       // </Grid> */}
       <Grid container sx={{ padding: 4, backgroundColor: '#FAFAFA' }}>
         <Grid item xs={4}>
-          <Paper sx={{ marginRight: 3, padding: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', border: '2px dashed #D9D9D9' }}>
-              <img src={quiz.imageURL} style={{ maxWidth: '70%', height: 'auto' }} />
-            </Box>
-            {/* <Divider sx={{ marginY: 2, border: '1px dashed #FAFAFA' }} /> */}
-            <Typography variant="h5">{quiz.title}</Typography>
-            <Typography>{quiz.description}</Typography>
+          <Paper sx={{ marginRight: 3, padding: 2, maxWidth: '28vw' }}>
+            <Stack spacing={2}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', border: '2px dashed #D9D9D9' }}>
+                <img src={quiz.imageURL} style={{ maxWidth: '70%', height: 'auto' }} />
+              </Box>
+              {/* <Divider sx={{ marginY: 2, border: '1px dashed #FAFAFA' }} /> */}
+              <Typography variant="h5">{quiz.title}</Typography>
+              <Typography>{quiz.description}</Typography>
+              <Button variant="contained" endIcon={<Edit />}>
+                Edit
+              </Button>
+              {/* <Typography>{quiz.description}</Typography>
+              <Typography>{quiz.description}</Typography> */}
+            </Stack>
           </Paper>
         </Grid>
         <Grid item xs={8}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
+            <Button variant="contained" endIcon={<AddCircleOutline />}>
+              Add new question
+            </Button>
+          </Box>
           <Stack>
             {questions.map((question, index) => (
               <Paper sx={{ padding: 2, marginBottom: 2 }}>

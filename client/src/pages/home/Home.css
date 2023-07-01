@@ -3,8 +3,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600&display=swap');
 
 .home {
-  background-color: white;
-  padding: 10px 12vw;
+  /* background: url('../../../src/assets/Creative ways to stay close in a remote working world.png');
+  background-repeat: no-repeat;
+  background-size: auto; */
+  padding: 10px 15vw;
 }
 
 .brand-home {

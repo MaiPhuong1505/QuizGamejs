@@ -13,7 +13,9 @@ const GameHeader = ({ progress, pinCode, quiz, time, currentIndex }) => {
         <Typography className="question">
           {isDiplay && `Question: ${currentIndex + 1}/${quiz.questions.length}`}
         </Typography>
-        <Typography className="title">{isDiplay ? `${quiz.title}` : `Welcome, your ID room is: ${pinCode}`}</Typography>
+        <Typography className="title">
+          {isDiplay ? `${quiz.title}` : `Welcome, your room code is: ${pinCode}`}
+        </Typography>
         <div className="time">{isDiplay && <div className="time-count">{time}</div>}</div>
       </div>
     </AppBar>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Quiz from '../../components/quiz/Quiz';
 import { Box, Button, Divider, Grid, IconButton, Paper, Stack, Toolbar, Typography } from '@mui/material';
-import { AddCircleOutline } from '@mui/icons-material';
+import { AddCircleOutline, Style, History } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { quizServices } from '../../services/quizServices';
@@ -46,6 +46,12 @@ const Profile = () => {
               </Button>
               <Button variant="contained" endIcon={<AddCircleOutline />} onClick={() => navigate('/autoCreateQuiz')}>
                 Create quiz automatically
+              </Button>
+              <Button variant="contained" endIcon={<Style />} onClick={() => navigate('/flashcard')}>
+                View all flashcards
+              </Button>
+              <Button variant="contained" endIcon={<History />}>
+                View all results
               </Button>
             </Stack>
           </Paper>

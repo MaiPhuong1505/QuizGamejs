@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Typography } from '@mui/material';
-import MyLogo from '../../assets/logo192.png';
+import MyLogo from '../../assets/question mark.png';
 import './Layout.css';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,7 +25,7 @@ const Header = () => {
         <img src={MyLogo} style={{ width: 60 }} alt="Logo" />
         {/* <Link to="/"> */}
         <Typography color="primary" className="brand">
-          QuizGame
+          QuizNow
         </Typography>
         {/* </Link> */}
       </div>

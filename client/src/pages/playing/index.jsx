@@ -10,9 +10,12 @@ import { socket } from '../../socketClient';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { quizServices } from '../../services/quizServices';
+import GameEntry from '../game-entry';
 
 const Playing = () => {
   const { user } = useSelector((state) => state);
+  console.log('user in playing', user);
+
   const { id } = useParams();
 
   const [pinCode, setPinCode] = useState('');
@@ -75,18 +78,21 @@ const Playing = () => {
     },
   ]);
 
-  const isMultiAnswer = true;
-
   const isWaitingPlayer = progress === PLAYING_PROGRESS.WAITING_PLAYER;
-
+  let currentQuestion = questionList[currentQuestionIndex];
   const changeStartStatus = (status) => {
     setProgress(status);
   };
 
   useEffect(() => {
-    socket.emit('Get_PIN_code_from_server', (code) => {
-      setPinCode(code);
-    });
+    if (user.token && id) {
+      const data = { quizId: id, hostId: user.user._id };
+      socket.emit('Get_PIN_code_from_server', data);
+      socket.on('New_game', (newGameData) => {
+        console.log('newGameData in host', newGameData);
+        setPinCode(newGameData.code);
+      });
+    }
   }, []);
   useEffect(() => {
     const getQuizById = async (id, token) => {
@@ -102,7 +108,6 @@ const Playing = () => {
       }
     };
     if (user.token && id) {
-      console.log(1);
       setRole(ROLE.HOST);
       getQuizById(id, user.token);
     }
@@ -112,14 +117,16 @@ const Playing = () => {
       setQuestionList(quiz.questions);
     }
   }, [quiz]);
-  console.log(quiz, questionList[currentQuestionIndex]);
-  return (
+
+  return role === ROLE.PLAYER && progress === PLAYING_PROGRESS.WAITING_PLAYER ? (
+    <GameEntry />
+  ) : (
     <div className="playing">
       <GameHeader
         progress={progress}
         pinCode={pinCode}
         quiz={quiz}
-        time={questionList[currentQuestionIndex]?.time}
+        time={currentQuestion?.time}
         currentIndex={currentQuestionIndex}
       />
       <ButtonControl progress={progress} role={role} startFunc={changeStartStatus} />
@@ -127,9 +134,9 @@ const Playing = () => {
         <WaitingPlayer />
       ) : (
         <>
-          <QuestionInGame answersChart={answersChart} progress={progress} role={role} />
-          <div className="submit">{isMultiAnswer && <div className="submit-btn">SUBMIT</div>}</div>
-          <Answer answers={answers} />
+          <QuestionInGame question={currentQuestion} answersChart={answersChart} progress={progress} role={role} />
+          <div className="submit">{currentQuestion.isMultipleAnswer && <div className="submit-btn">SUBMIT</div>}</div>
+          <Answer answers={currentQuestion.answerOptions} />
         </>
       )}
     </div>

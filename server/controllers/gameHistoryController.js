@@ -1,16 +1,50 @@
 import GameHistory from '../models/gameHistoryModel.js';
+import Quiz from '../models/quizModel.js';
 
 const gameHistoryController = {
-  createHistory: async (req, res) => {
+  createHistory: async (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { quizId, hostId } = data;
+        const quiz = await Quiz.findOne({ _id: quizId });
+        // console.log('findquiz', quiz);
+        const newGameHistory = await GameHistory.create({
+          quizId,
+          numberOfPlayers: 0,
+          numberOfQuestions: quiz.questions.length,
+          hostId,
+        });
+        console.log('history', newGameHistory);
+        resolve(newGameHistory);
+        // const newGameData = { newGameHistory, code };
+
+        // console.log('newGameHistory', newGameHistory);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  getHistoryById: async (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const history = await GameHistory.findOne({ _id: data });
+        // console.log('history', history);
+        // socket.emit('Get_game', history);
+        resolve(history);
+        console.log('History', history);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  getHistoryByCode: async (socket, data) => {
     try {
-      const { quizId, numberOfPlayers, numberOfQuestions, hostId } = req.body;
-      const newGameHistory = await GameHistory.create({ quizId, numberOfPlayers, numberOfQuestions, hostId });
-      res.json({
-        msg: 'Saved game history',
-        gameHistory: newGameHistory._id,
-      });
+      const history = await GameHistory.findOne({ code: data });
+      // console.log('history', history);
+      socket.emit('Get_game', history);
+      console.log('istory', history);
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      console.log('newGameHistory', error.message);
     }
   },
   getAllGameHistories: async (req, res) => {

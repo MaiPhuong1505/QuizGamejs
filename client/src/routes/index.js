@@ -8,9 +8,12 @@ import Playing from '../pages/playing';
 import Profile from '../pages/profile';
 import QuizPage from '../pages/quiz';
 import FlashCard from '../pages/flash-card';
+import FlashCardContent from '../pages/flash-card-content';
 import Quiz from '../pages/quiz';
 import Result from '../pages/result';
 import CreateQuestion from '../components/question/CreateQuestion';
+import ViewResult from '../pages/view-result';
+import ViewResultDetail from '../pages/view-result-detail';
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -25,6 +28,9 @@ const publicRoutes = [
   { path: '/result', component: Result, layout: null },
   { path: '/autoCreateQuiz', component: CreateQuizAuto },
   { path: '/flashcard', component: FlashCard },
+  { path: '/flashcard-content', component: FlashCardContent, layout: null },
+  { path: '/view-result', component: ViewResult, layout: null },
+  { path: '/view-result-detail', component: ViewResultDetail, layout: null },
   { path: '/question', component: CreateQuestion },
 ];
 

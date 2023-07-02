@@ -19,28 +19,45 @@ import UploadImage from '../UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowBack, Save } from '@mui/icons-material';
 import { QUIZ_VISIBILITY } from '../../utils/constants';
+import { useParams } from 'react-router';
 import { quizServices } from '../../services/quizServices';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const CreateQuiz = () => {
+const UpdateQuiz = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
   console.log('user in create quiz', user);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [visibility, setVisibility] = useState('');
   const [categoryID, setCategoryID] = useState('');
   const [imageURL, setImageURL] = useState('');
   const [notifyText, setNotifyText] = useState('');
   // const [selectedVisibility, setSelectedVisibility] = useState(QUIZ_VISIBILITY.PUBLIC)
 
-  const [quizData, setQuizData] = useState({});
-
-  const handleChangeInput = (e) => {
+  const handleChangeInputDescription = (e) => {
     if (notifyText) {
       setNotifyText('');
     }
     const { name, value } = e.target;
-    console.log('name', name, 'value', value);
-    setQuizData({ ...quizData, [name]: value });
+    setDescription(value);
+  };
+  const handleChangeInputTitle = (e) => {
+    if (notifyText) {
+      setNotifyText('');
+    }
+    const { name, value } = e.target;
+    setTitle(value);
+  };
+  const handleChangeInputVisibility = (e) => {
+    if (notifyText) {
+      setNotifyText('');
+    }
+    const { name, value } = e.target;
+    setVisibility(value);
   };
   const getCategory = (categoryId) => {
     setCategoryID(categoryId);
@@ -48,27 +65,54 @@ const CreateQuiz = () => {
   const getImageURL = (url) => {
     setImageURL(url);
   };
-  
+
+
+  useEffect(() => {
+    try {
+      quizServices.getQuizById(id, user?.token).then((response) => {
+        console.log(response);
+        setTitle(response?.data?.quiz?.title);
+        setDescription(response?.data?.quiz?.description);
+        setImageURL(response?.data?.quiz?.imageURL);
+        setVisibility(response?.data?.quiz?.visibility);
+        setCategoryID(response?.data?.quiz?.category);
+      });
+    } catch (error) {
+      console.log('error', error);
+      navigate('/404');
+    }
+  }, []);
+
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
   const handleSubmit = async (event) => {
 
     try {
       //validate
-      const sendData = { ...quizData, imageURL, category: categoryID, user: user.user._id };
-      if (!sendData.title) {
+      if (!title) {
         setNotifyText('Please fill in quiz title');
         return;
       }
-      if (!sendData.category) {
+      if (!categoryID) {
         setNotifyText('Please select a category');
         return;
       }
-      if (!sendData.visibility) {
+      if (!visibility) {
         setNotifyText('Please select visibility mode');
         return;
       }
 
       //call api to save
-      const response = await quizServices.createQuiz(sendData,user?.token);
+      const response = await quizServices.createQuiz({
+        title: title,
+        category: categoryID,
+        description: description,
+        visibility: visibility,
+        imageURL: imageURL,
+        user: user.user._id
+      },user?.token);
       console.log(response);
 
       //redirect
@@ -118,7 +162,8 @@ const CreateQuiz = () => {
                 placeholder="Quiz title"
                 variant="standard"
                 name="title"
-                onChange={handleChangeInput}
+                value={title}
+                onChange={handleChangeInputTitle}
               ></TextField>
               <Typography>Description</Typography>
               <TextField
@@ -129,7 +174,8 @@ const CreateQuiz = () => {
                 placeholder="Description"
                 variant="standard"
                 name="description"
-                onChange={handleChangeInput}
+                value={description}
+                onChange={handleChangeInputDescription}
               ></TextField>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
@@ -146,7 +192,8 @@ const CreateQuiz = () => {
                       id="visibility-select"
                       size="small"
                       name="visibility"
-                      onChange={handleChangeInput}
+                      value={visibility}
+                      onChange={handleChangeInputVisibility}
                     >
                       {Object.values(QUIZ_VISIBILITY).map((value) => (
                         <MenuItem key={value} value={value}>
@@ -162,7 +209,7 @@ const CreateQuiz = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
-                  <CategorySelect getData={getCategory} />
+                  <CategorySelect getData={getCategory} categoryId={categoryID} />
                 </Grid>
               </Grid>
               {/* <Grid container> */}
@@ -180,7 +227,7 @@ const CreateQuiz = () => {
                 <Button variant="contained" endIcon={<Save />} onClick={handleSubmit}>
                   Save
                 </Button>
-                <Button variant="outlined" endIcon={<ArrowBack />}>
+                <Button variant="outlined" endIcon={<ArrowBack />} onClick={handleCancel}>
                   Cancel
                 </Button>
               </Box>
@@ -193,4 +240,4 @@ const CreateQuiz = () => {
   );
 };
 
-export default CreateQuiz;
+export default UpdateQuiz;

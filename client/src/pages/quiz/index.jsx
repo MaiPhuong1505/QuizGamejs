@@ -6,14 +6,26 @@ import { quizServices } from '../../services/quizServices.js';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { AddCircleOutline, CheckCircle, Circle, CircleOutlined, Delete, Edit } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const QuizPage = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state);
   const [quiz, setQuiz] = useState({});
   const [questions, setQuestions] = useState([]);
+  const navigate = useNavigate();
 
-  const handleEditQuiz = () => {};
+  const handleEditQuiz = () => {
+    navigate(`/updateQuiz/${id}`);
+  }; //redirect to page update quiz
+
+  const handleCreateQuestion = () => {
+    navigate(`/createQuestion`);
+  }; //redirect to page create question
+
+  const handleEditQuestion = () => {
+    navigate(`/updateQuestion/${id}`);
+  }; //redirect to page update question
   useEffect(() => {
     const getQuizById = async () => {
       try {
@@ -33,32 +45,6 @@ const QuizPage = () => {
   // console.log('response.data.quiz', quiz.questions[0]);
   return (
     <>
-      {/* <Grid container sx={{ backgroundColor: '#FAFAFA', padding: 4, minHeight: '100vh', boxSizing: 'border-box' }}>
-        <Grid item xs={4}>
-          <CreateQuiz />
-        </Grid>
-        <Grid item xs={8}>
-          <CreateQuestion />
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              marginBottom: 3,
-            }}
-          >
-            <Button
-              variant="contained"
-              // onClick={handleSubmit}
-            >
-              Save
-            </Button>
-            <Button variant="outlined">Cancel</Button>
-          </Box>
-        </Grid>
-      // </Grid> */}
       <Grid container sx={{ padding: 4, backgroundColor: '#FAFAFA' }}>
         <Grid item xs={4}>
           <Paper sx={{ marginRight: 3, padding: 2, maxWidth: '28vw' }}>
@@ -69,7 +55,7 @@ const QuizPage = () => {
               {/* <Divider sx={{ marginY: 2, border: '1px dashed #FAFAFA' }} /> */}
               <Typography variant="h5">{quiz.title}</Typography>
               <Typography>{quiz.description}</Typography>
-              <Button variant="contained" endIcon={<Edit />}>
+              <Button variant="contained" endIcon={<Edit />} onClick={handleEditQuiz}>
                 Edit
               </Button>
               {/* <Typography>{quiz.description}</Typography>
@@ -79,7 +65,7 @@ const QuizPage = () => {
         </Grid>
         <Grid item xs={8}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
-            <Button variant="contained" endIcon={<AddCircleOutline />}>
+            <Button variant="contained" endIcon={<AddCircleOutline />} onClick={handleCreateQuestion}>
               Add new question
             </Button>
           </Box>
@@ -91,7 +77,7 @@ const QuizPage = () => {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Typography variant="h6">Question {index + 1}</Typography>
                       <Box sx={{ '& button': { mr: 1 } }}>
-                        <Button variant="contained" endIcon={<Edit />} onClick={handleEditQuiz}>
+                        <Button variant="contained" endIcon={<Edit />} onClick={handleEditQuestion}>
                           Edit
                         </Button>
                         <Button variant="outlined" endIcon={<Delete />} color="error">

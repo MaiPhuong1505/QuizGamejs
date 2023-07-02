@@ -11,6 +11,8 @@ import FlashCard from '../pages/flash-card';
 import Quiz from '../pages/quiz';
 import Result from '../pages/result';
 import CreateQuestion from '../components/question/CreateQuestion';
+import UpdateQuiz from '../components/quiz/UpdateQuiz';
+import UpdateQuestion from '../components/question/UpdateQuestion';
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -18,6 +20,7 @@ const publicRoutes = [
   { path: '/profile', component: Profile },
   { path: '/quiz/:id', component: QuizPage },
   { path: '/createQuiz', component: CreateQuiz },
+  { path: '/updateQuiz/:id', component: UpdateQuiz },
   { path: '/game', component: Game, layout: null },
   { path: '/entry', component: GameEntry, layout: null },
   { path: '/playing', component: Playing, layout: null },
@@ -25,7 +28,8 @@ const publicRoutes = [
   { path: '/result', component: Result, layout: null },
   { path: '/autoCreateQuiz', component: CreateQuizAuto },
   { path: '/flashcard', component: FlashCard },
-  { path: '/question', component: CreateQuestion },
+  { path: '/createQuestion', component: CreateQuestion },
+  { path: '/updateQuestion/:id', component: UpdateQuestion },
 ];
 
 const privateRoutes = [];

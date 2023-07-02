@@ -1,3 +1,4 @@
+import { response } from 'express';
 import gameHistoryController from './controllers/gameHistoryController.js';
 import playerController from './controllers/playerController.js';
 
@@ -29,24 +30,9 @@ const socketServer = (socket) => {
     newGameHistory = { ...room._doc, code };
     listRoom.push({ code, roomId: room._id, players: [] });
     console.log('listRoom', listRoom);
-    // console.log('newGameHistory', newGameHistory);
+    console.log('newGameHistory', newGameHistory);
     socket.emit('New_game', newGameHistory);
     newGameHistory = {};
-    // //player gửi request, server trả về game-history
-    // if (Object.keys(data).length === 0) {
-    //   socket.on('Player_send_PIN_code', (code) => {
-    //     if (listRoom.includes(parseInt(code))) {
-    //       socket.emit('Player_send_PIN_code', true);
-    //       gameHistoryController.getHistoryByCode(socket, code);
-    //     } else {
-    //       socket.emit('Player_send_PIN_code', false);
-    //     }
-    //   });
-    // } else {
-    //   //host gửi request, server tạo mới 1 game-history
-    //   const code = genCode();
-    //   gameHistoryController.createHistory(socket, data, code);
-    // }
   });
   socket.on('Player_send_PIN_code', (code) => {
     const room = listRoom.find((codeRoom) => codeRoom.code === parseInt(code));
@@ -64,12 +50,21 @@ const socketServer = (socket) => {
       for (let i = 0; i < listRoom.length; i++) {
         if (listRoom[i].roomId.toString() === newPlayerInGame.gameHistoryId) {
           listRoom[i].players.push(newPlayer);
-          socket.emit('New_player', listRoom[i]);
+          socket.broadcast.emit('Get_list_player_response', listRoom[i].players);
+          socket.emit('Join_response', `Welcome ${newPlayer.nickname}`);
+
           console.log('listRoom i', listRoom[i]);
         }
       }
     } else if (newPlayer.msg) {
-      socket.emit('Join_response', msg);
+      socket.emit('Join_response', newPlayer.msg);
+    }
+  });
+  socket.on('Get_list_player', (roomId) => {
+    for (let i = 0; i < listRoom.length; i++) {
+      if (listRoom[i].roomId.toString() === roomId) {
+        socket.emit('Get_list_player_response', listRoom[i].players);
+      }
     }
   });
 };

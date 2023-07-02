@@ -19,6 +19,7 @@ const Playing = () => {
   const { id } = useParams();
 
   const [pinCode, setPinCode] = useState('');
+  const [roomId, setRoomId] = useState('');
   const [progress, setProgress] = useState(PLAYING_PROGRESS.WAITING_PLAYER);
   const [role, setRole] = useState(ROLE.PLAYER);
   const [quiz, setQuiz] = useState({});
@@ -47,37 +48,6 @@ const Playing = () => {
     },
   ]);
 
-  const [answers, setAnswers] = useState([
-    {
-      answer: 'Lorem ipsum dolor sit amet.',
-      isSelected: false,
-      isCorrect: true,
-      type: ANSWER_TYPE.SQUARE,
-      disable: false,
-    },
-    {
-      answer: 'Lorem ipsum dolor sit amet.',
-      isSelected: false,
-      isCorrect: false,
-      type: ANSWER_TYPE.CIRCLE,
-      disable: false,
-    },
-    {
-      answer: 'Lorem ipsum dolor sit amet.',
-      isSelected: false,
-      isCorrect: false,
-      type: ANSWER_TYPE.HEART,
-      disable: false,
-    },
-    {
-      answer: 'Lorem ipsum dolor sit amet.',
-      isSelected: false,
-      isCorrect: true,
-      type: ANSWER_TYPE.STAR,
-      disable: false,
-    },
-  ]);
-
   const isWaitingPlayer = progress === PLAYING_PROGRESS.WAITING_PLAYER;
   let currentQuestion = questionList[currentQuestionIndex];
   const changeStartStatus = (status) => {
@@ -91,6 +61,7 @@ const Playing = () => {
       socket.on('New_game', (newGameData) => {
         console.log('newGameData in host', newGameData);
         setPinCode(newGameData.code);
+        setRoomId(newGameData._id);
       });
     }
   }, []);
@@ -131,7 +102,7 @@ const Playing = () => {
       />
       <ButtonControl progress={progress} role={role} startFunc={changeStartStatus} />
       {isWaitingPlayer ? (
-        <WaitingPlayer />
+        <WaitingPlayer roomId={roomId} />
       ) : (
         <>
           <QuestionInGame question={currentQuestion} answersChart={answersChart} progress={progress} role={role} />

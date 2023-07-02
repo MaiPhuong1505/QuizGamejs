@@ -2,22 +2,28 @@ import React, { useEffect, useState } from 'react';
 import './WaitingPlayer.scss';
 import { socket } from '../../../socketClient';
 
-const WaitingPlayer = () => {
-  let receivedPlayersList = [];
-  const [players, setPlayers] = useState(receivedPlayersList);
-  socket.on('New_player', (room) => {
-    console.log('New_player', room.players);
-    receivedPlayersList = room.players;
-  });
+const WaitingPlayer = ({ roomId }) => {
+  console.log('in Waiting Player component', roomId);
+  // let receivedPlayersList = [];
+  const [players, setPlayers] = useState([]);
+  // useEffect(() => {
+  //   socket.emit('Get_list_player', roomId);
+  //   socket.on('Get_list_player_response', (playerList) => {
+  //     console.log('Get_list_player_response', playerList);
+  //     setPlayers(playerList);
+  //   });
+  // }, []);
 
   useEffect(() => {
-    setPlayers(receivedPlayersList);
-  }, receivedPlayersList);
+    socket.on('Get_list_player_response', (playerList) => {
+      console.log('Get_list_player_response', playerList);
+      setPlayers(playerList);
+    });
+  }, []);
 
-  // const players = [
-  //   { name: 'player 1', id: 1 },
-  //   { name: 'player 3', id: 3 },
-  // ];
+  // useEffect(() => {
+  //   setPlayers(receivedPlayersList);
+  // }, [receivedPlayersList]);
 
   return (
     <div className="waiting-player">
@@ -25,7 +31,7 @@ const WaitingPlayer = () => {
         <div className="player-inner">
           {players.map((player, index) => (
             <div key={index} className="player">
-              {player.name}
+              {player.nickname}
             </div>
           ))}
         </div>

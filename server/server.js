@@ -22,7 +22,7 @@ const io = new Server(httpServer, {
 });
 
 io.on('connection', (socket) => {
-  socketServer(socket);
+  socketServer(socket, io);
 });
 
 app.use(express.json());

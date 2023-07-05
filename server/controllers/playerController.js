@@ -1,4 +1,5 @@
 import Player from '../models/playerModel.js';
+import { MAX_SCORE } from '../utils/constants.js';
 
 const playerController = {
   createPlayer: async (data) => {
@@ -15,17 +16,31 @@ const playerController = {
           resolve(newPlayer);
         }
       } catch (error) {
-        console.log('error in player controller', error.message);
-        // reject(error);
+        reject(error);
       }
     });
   },
-  updatePlayer: async (req, res) => {
+  updatePlayer: async (data) => {
     try {
-      const { playerId, score } = req.body;
-      await Player.findOneAndUpdate({ _id: playerId }, { $set: score });
+      const { playerId, answerSelected, timeToAnswer, timeToSendQuestion, maxTime } = data;
+      if (answerSelected?.isCorrect) {
+        const tAnswer = new Date(timeToAnswer);
+        const tStart = new Date(timeToSendQuestion);
+        const timeDiff = tAnswer.getTime() - tStart.getTime();
+        const maxTimeMs = maxTime * 1000;
+        const score = MAX_SCORE - (MAX_SCORE / maxTimeMs) * timeDiff;
+        console.log('score', playerId, score);
+        const updatedPlayer = await Player.findOneAndUpdate(
+          { _id: playerId },
+          { $inc: { score: score } },
+          { new: true },
+        );
+        console.log('updatedPlayer', updatedPlayer);
+      } else {
+        console.log('wrong answer');
+      }
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      console.log(error.message);
     }
   },
 };

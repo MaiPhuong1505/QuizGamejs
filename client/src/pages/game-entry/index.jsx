@@ -3,7 +3,7 @@ import './GameEntry.scss';
 import { Button, TextField, Typography } from '@mui/material';
 import { socket } from '../../socketClient';
 
-const GameEntry = () => {
+const GameEntry = ({ getPlayer }) => {
   const enterCodeText = {
     ENTER_PIN: 'ENTER YOUR PIN',
     ENTER_NAME: 'ENTER YOUR NAME',
@@ -15,11 +15,9 @@ const GameEntry = () => {
   const [buttonText, setButtonText] = useState(enterCodeText.ENTER_PIN);
 
   const handleEnterCode = () => {
-    socket.connect();
     if (buttonText === enterCodeText.ENTER_PIN) {
-      // socket.emit('Get_PIN_code_from_server', {});
       socket.emit('Player_send_PIN_code', codeValue);
-      socket.on('Player_send_PIN_code', (data) => {
+      socket.on('Player_send_PIN_code_response', (data) => {
         if (data.rightCode) {
           setCodeValue('');
           setGameHistoryId(data.roomId);
@@ -31,12 +29,13 @@ const GameEntry = () => {
     } else if (buttonText === enterCodeText.ENTER_NAME) {
       console.log('gameHistoryId in game entry', gameHistoryId);
       socket.emit('Player_join', { nickname: codeValue, gameHistoryId });
-      socket.on('Join_response', (msg) => {
-        if (msg.includes('Welcome')) {
+      socket.on('Join_response', (data) => {
+        if (data.player) {
           setJoined(true);
-          setNotifyText(msg);
+          setNotifyText(data.msg);
+          getPlayer(data.player);
         } else {
-          setNotifyText(msg);
+          setNotifyText(data);
         }
       });
     }

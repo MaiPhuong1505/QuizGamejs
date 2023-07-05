@@ -9,13 +9,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { DoneOutline, ExitToApp, ListAlt, Lock, NotStarted, SkipNext } from '@mui/icons-material';
+import { socket } from '../../../socketClient';
 // import { PLAYING_PROGRESS, ROLE } from '../../../utils/contants';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ButtonControl = ({ progress, role, startFunc }) => {
+const ButtonControl = ({ progress, role, roomId, quiz }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -27,7 +28,7 @@ const ButtonControl = ({ progress, role, startFunc }) => {
   };
 
   const handleStart = () => {
-    startFunc(PLAYING_PROGRESS.ANSWER_TIME);
+    socket.emit('Start_game', { roomId, quiz });
   };
 
   if (progress === PLAYING_PROGRESS.WAITING_PLAYER)

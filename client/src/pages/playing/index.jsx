@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { quizServices } from '../../services/quizServices';
 import GameEntry from '../game-entry';
+import { Button } from '@mui/material';
 
 const Playing = () => {
   const { user } = useSelector((state) => state);
@@ -23,6 +24,7 @@ const Playing = () => {
   const [progress, setProgress] = useState(PLAYING_PROGRESS.WAITING_PLAYER);
   const [role, setRole] = useState(ROLE.PLAYER);
   const [quiz, setQuiz] = useState({});
+  const [player, setPlayer] = useState({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionList, setQuestionList] = useState([]);
   const [answersChart, setAnswersChart] = useState([
@@ -50,10 +52,14 @@ const Playing = () => {
 
   const isWaitingPlayer = progress === PLAYING_PROGRESS.WAITING_PLAYER;
   let currentQuestion = questionList[currentQuestionIndex];
-  const changeStartStatus = (status) => {
-    setProgress(status);
+  // const changeStartStatus = () => {
+  //   socket.emit('Start_game', { roomId, quiz });
+  // };
+  const getPlayerCb = (player) => {
+    setPlayer(player);
   };
 
+  console.log('player callback', player);
   useEffect(() => {
     if (user.token && id) {
       const data = { quizId: id, hostId: user.user._id };
@@ -72,7 +78,7 @@ const Playing = () => {
         console.log('response', response.data);
         if (response.data.quiz) {
           setQuiz(response.data.quiz);
-          setQuestionList(response.data.quiz.questions);
+          setQuestionList(response.data.quiz?.questions);
         }
       } catch (error) {
         console.log('getQuizById', error);
@@ -83,14 +89,31 @@ const Playing = () => {
       getQuizById(id, user.token);
     }
   }, []);
+  // useEffect(() => {
+  //   if (quiz.questions) {
+  //     setQuestionList(quiz.questions);
+  //   }
+  // }, [quiz]);
   useEffect(() => {
-    if (quiz.questions) {
-      setQuestionList(quiz.questions);
-    }
-  }, [quiz]);
+    socket.on('Start_game_response_for_host', (data) => {
+      console.log('Start_game_response_for_host', data);
+      setProgress(data.progress);
+      setQuestionList(data.questionsResponse);
+      console.log('time to send host', data.timeToSend);
+    });
+    socket.on('Start_game_response_for_player', (data) => {
+      console.log('Start_game_response_for_player', data);
+      setProgress(data?.progress);
+      setQuiz(data?.quizResponse);
+      setQuestionList(data?.questionsResponse);
+      setRoomId(data?.roomId);
+      console.log('time to send players', data.timeToSend);
+    });
+  }, [roomId]);
+  console.log('roomId in Playing', roomId);
 
   return role === ROLE.PLAYER && progress === PLAYING_PROGRESS.WAITING_PLAYER ? (
-    <GameEntry />
+    <GameEntry getPlayer={getPlayerCb} />
   ) : (
     <div className="playing">
       <GameHeader
@@ -100,14 +123,27 @@ const Playing = () => {
         time={currentQuestion?.time}
         currentIndex={currentQuestionIndex}
       />
-      <ButtonControl progress={progress} role={role} startFunc={changeStartStatus} />
+      <ButtonControl progress={progress} role={role} roomId={roomId} quiz={quiz} />
       {isWaitingPlayer ? (
         <WaitingPlayer roomId={roomId} />
       ) : (
         <>
           <QuestionInGame question={currentQuestion} answersChart={answersChart} progress={progress} role={role} />
-          <div className="submit">{currentQuestion.isMultipleAnswer && <div className="submit-btn">SUBMIT</div>}</div>
-          <Answer answers={currentQuestion.answerOptions} />
+          {
+            <div className="submit">
+              {role === ROLE.PLAYER && currentQuestion?.isMultipleAnswer && (
+                <Button className="submit-btn">SUBMIT</Button>
+              )}
+            </div>
+          }
+          <Answer
+            question={currentQuestion}
+            progress={progress}
+            role={role}
+            player={player}
+            time={currentQuestion?.time}
+            roomId={roomId}
+          />
         </>
       )}
     </div>

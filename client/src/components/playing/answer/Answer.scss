@@ -6,49 +6,43 @@
 
   .answer {
     width: 47%;
-    margin-bottom: 44px;
+    margin-bottom: 25px;
 
     &-item {
       width: 100%;
       display: flex;
       background: #d9f6ff;
-      height: 125px;
+      height: 100px;
       border: 1px solid #00b8f1;
       border-radius: 10px;
+      transition: all 0.2s ease-in-out;
+      justify-content: flex-start;
+      font-weight: 400;
+      text-transform: none;
+      padding: 0;
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0px 0px 10px rgba(0, 184, 241, 0.5); // Thêm hiệu ứng box-shadow
+      }
 
       .answer-icon {
-        border-right: 1px solid #00b8f1;
-        width: 125px;
+        width: 100px;
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
       .answer-text {
+        border-left: 1px solid #00b8f1;
         font-size: 24px;
         vertical-align: middle;
-        margin: auto 24px;
+        padding: 24px;
+        color: black;
       }
     }
 
     &-item.disable {
-      color: rgba(0, 0, 0, 0.45);
-      background: rgba(217, 246, 255, 0.45);
-      border: 1px solid rgba(0, 184, 241, 0.45);
-
-      .answer-icon {
-        border-right: 1px solid rgba(0, 184, 241, 0.45);
-
-        svg {
-          path {
-            fill: rgba(0, 184, 241, 0.45);
-          }
-
-          rect {
-            fill: rgba(0, 184, 241, 0.45);
-          }
-        }
-      }
+      opacity: 0.4;
     }
 
     &-item.in-correct {

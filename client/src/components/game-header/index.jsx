@@ -3,6 +3,7 @@ import { AppBar, Typography } from '@mui/material';
 import './GameHeader.scss';
 import { PLAYING_PROGRESS } from '../../utils/constants';
 import { socket } from '../../socketClient';
+import Countdown from './Countdown';
 const GameHeader = ({ progress, pinCode, quiz, time, currentIndex }) => {
   const isPlaying = progress === PLAYING_PROGRESS.ANSWER_TIME;
 
@@ -16,7 +17,7 @@ const GameHeader = ({ progress, pinCode, quiz, time, currentIndex }) => {
         <Typography className="title">
           {isPlaying ? `${quiz.title}` : `Welcome, your room code is: ${pinCode}`}
         </Typography>
-        <div className="time">{isPlaying && <div className="time-count">{time}</div>}</div>
+        <Countdown isPlaying={isPlaying} time={time} />
       </div>
     </AppBar>
   );

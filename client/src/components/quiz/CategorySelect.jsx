@@ -29,6 +29,8 @@ const CategorySelect = ({ getData, categoryId }) => {
   };
   useEffect(() => {
     getCategories(user.token);
+    setSelectedCategory(categoryId);
+    console.log('selectedCategory', selectedCategory, categoryId);
   }, []);
 
   const handleChange = (event) => {

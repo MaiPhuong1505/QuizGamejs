@@ -5,7 +5,6 @@ import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@emotion/react';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './components/layout';
-import { socket } from './socketClient';
 
 const theme = createTheme({
   palette: {

@@ -4,7 +4,7 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../utils/firebase';
 
-const UploadImage = ({ userID, username, quizId, getData, type, height, width = '100%', selectedURL = '' }) => {
+const UploadImage = ({ userID, username, quizId, getData, type, height, selectedURL = '' }) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png'],

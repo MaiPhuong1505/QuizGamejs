@@ -10,12 +10,13 @@ import {
   MenuItem,
   Paper,
   Select,
+  Skeleton,
   TextField,
   Toolbar,
   Typography,
 } from '@mui/material';
-import CategorySelect from './CategorySelect';
-import UploadImage from '../UploadImage';
+import CategorySelect from '../../components/quiz/CategorySelect';
+import UploadImage from '../../components/UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowBack, Save } from '@mui/icons-material';
 import { QUIZ_VISIBILITY } from '../../utils/constants';
@@ -30,6 +31,7 @@ const UpdateQuiz = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
   console.log('user in create quiz', user);
+  const [quiz, setQuiz] = useState({});
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [visibility, setVisibility] = useState('');
@@ -66,16 +68,16 @@ const UpdateQuiz = () => {
     setImageURL(url);
   };
 
-
   useEffect(() => {
     try {
       quizServices.getQuizById(id, user?.token).then((response) => {
         console.log(response);
+        setQuiz(response?.data?.quiz);
         setTitle(response?.data?.quiz?.title);
         setDescription(response?.data?.quiz?.description);
         setImageURL(response?.data?.quiz?.imageURL);
         setVisibility(response?.data?.quiz?.visibility);
-        setCategoryID(response?.data?.quiz?.category);
+        setCategoryID(response?.data?.quiz?.category?._id);
       });
     } catch (error) {
       console.log('error', error);
@@ -88,7 +90,6 @@ const UpdateQuiz = () => {
   };
 
   const handleSubmit = async (event) => {
-
     try {
       //validate
       if (!title) {
@@ -105,26 +106,31 @@ const UpdateQuiz = () => {
       }
 
       //call api to save
-      const response = await quizServices.createQuiz({
-        title: title,
-        category: categoryID,
-        description: description,
-        visibility: visibility,
-        imageURL: imageURL,
-        user: user.user._id
-      },user?.token);
+      const response = await quizServices.updateQuiz(
+        id,
+        {
+          title: title,
+          category: categoryID,
+          description: description,
+          visibility: visibility,
+          imageURL: imageURL,
+          user: user.user._id,
+        },
+        user?.token,
+      );
       console.log(response);
 
       //redirect
-      navigate(`/quiz/${response?.data?.newQuiz?.quizId}`);
+      navigate(`/quiz/${response?.data?.quiz?._id}`);
     } catch (error) {
       console.log('error', error);
-      navigate('/404');    
+      navigate('/404');
     }
   };
   return (
     <>
       <Box>
+        <Toolbar />
         <Box
           component={Paper}
           sx={{
@@ -137,13 +143,18 @@ const UpdateQuiz = () => {
         >
           <Grid container spacing={2}>
             <Grid item xs={4}>
-              <UploadImage
-                userID={user.user._id}
-                username={user.user.username}
-                type="quiz"
-                getData={getImageURL}
-                height="15vw"
-              />
+              {Object.keys(quiz).length > 0 ? (
+                <UploadImage
+                  userID={user.user._id}
+                  username={user.user.username}
+                  type="quiz"
+                  getData={getImageURL}
+                  height="15vw"
+                  selectedURL={quiz.imageURL}
+                />
+              ) : (
+                <Skeleton />
+              )}
             </Grid>
             <Grid item xs={1} sx={{ display: ' flex', justifyContent: 'center' }}>
               <Divider orientation="vertical" />

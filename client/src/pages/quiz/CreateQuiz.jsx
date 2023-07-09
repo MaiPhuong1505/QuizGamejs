@@ -14,11 +14,11 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import CategorySelect from './CategorySelect';
-import UploadImage from '../UploadImage';
+import CategorySelect from '../../components/quiz/CategorySelect';
+import UploadImage from '../../components/UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowBack, Save } from '@mui/icons-material';
-import { QUIZ_VISIBILITY } from '../../utils/constants';
+import { QUIZ_TYPE, QUIZ_VISIBILITY } from '../../utils/constants';
 import { quizServices } from '../../services/quizServices';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,12 +48,11 @@ const CreateQuiz = () => {
   const getImageURL = (url) => {
     setImageURL(url);
   };
-  
-  const handleSubmit = async (event) => {
 
+  const handleSubmit = async (event) => {
     try {
       //validate
-      const sendData = { ...quizData, imageURL, category: categoryID, user: user.user._id };
+      const sendData = { ...quizData, imageURL, category: categoryID, user: user.user._id, type: [QUIZ_TYPE.QUIZ] };
       if (!sendData.title) {
         setNotifyText('Please fill in quiz title');
         return;
@@ -68,19 +67,20 @@ const CreateQuiz = () => {
       }
 
       //call api to save
-      const response = await quizServices.createQuiz(sendData,user?.token);
+      const response = await quizServices.createQuiz(sendData, user?.token);
       console.log(response);
 
       //redirect
       navigate(`/quiz/${response?.data?.newQuiz?.quizId}`);
     } catch (error) {
       console.log('error', error);
-      navigate('/404');    
+      navigate('/404');
     }
   };
   return (
     <>
       <Box>
+        <Toolbar />
         <Box
           component={Paper}
           sx={{

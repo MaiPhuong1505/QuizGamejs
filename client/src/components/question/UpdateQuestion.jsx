@@ -53,6 +53,7 @@ const UpdateQuestion = () => {
         sx={{
           padding: 3,
           margin: 'auto',
+          marginTop: 3,
           display: 'flex',
           justifyContent: 'center',
           flexDirection: 'column',
@@ -61,7 +62,7 @@ const UpdateQuestion = () => {
       >
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <UploadImage height="10vw" width="10vw" />
+            <UploadImage height="15vw" />
           </Grid>
           <Grid item xs={8}>
             <Divider />
@@ -78,29 +79,40 @@ const UpdateQuestion = () => {
               onChange={handleChangeInput}
             ></TextField>
             <FormControlLabel control={<Checkbox />} label="Multiple correct answers" />
-            <Typography>
-              Time (seconds) <span style={{ color: '#E25B45' }}>*</span>
-            </Typography>
-            <FormControl sx={{ marginBottom: '16px', width: '100%' }}>
-              <InputLabel id="time"></InputLabel>
-              <Select label="" size="small" name="time">
-                <MenuItem value={20}>20</MenuItem>
-                <MenuItem value={30}>30</MenuItem>
-                <MenuItem value={45}>45</MenuItem>
-                <MenuItem value={60}>60</MenuItem>
-              </Select>
-            </FormControl>
-            <Typography>
-              Difficulty<span style={{ color: '#E25B45' }}>*</span>
-            </Typography>
-            <FormControl sx={{ marginBottom: '16px', width: '100%' }}>
-              <InputLabel id="time"></InputLabel>
-              <Select label="" size="small" name="difficulty">
-                <MenuItem value={'Easy'}>Easy</MenuItem>
-                <MenuItem value={'Medium'}>Medium</MenuItem>
-                <MenuItem value={'Difficult'}>Difficult</MenuItem>
-              </Select>
-            </FormControl>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography>
+                  Time (seconds) <span style={{ color: '#E25B45' }}>*</span>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography>
+                  Difficulty<span style={{ color: '#E25B45' }}>*</span>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <FormControl sx={{ marginBottom: '16px', width: '100%' }} size="small">
+                  <InputLabel id="time"></InputLabel>
+                  <Select label="" name="time">
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={30}>30</MenuItem>
+                    <MenuItem value={45}>45</MenuItem>
+                    <MenuItem value={60}>60</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <FormControl sx={{ marginBottom: '16px', width: '100%' }} size="small">
+                  <InputLabel id="time"></InputLabel>
+                  <Select label="" name="difficulty">
+                    <MenuItem value={'Easy'}>Easy</MenuItem>
+                    <MenuItem value={'Medium'}>Medium</MenuItem>
+                    <MenuItem value={'Difficult'}>Difficult</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+
             <Grid container spacing={2}>
               <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
                 <TextField

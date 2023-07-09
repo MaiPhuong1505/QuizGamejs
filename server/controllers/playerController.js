@@ -39,8 +39,8 @@ const playerController = {
           resolve(updatedPlayer);
         } else {
           console.log('wrong answer');
-          const newData = { ...data, _id: playerId };
-          resolve(newData);
+          const getPlayer = await Player.findOne({ _id: playerId });
+          resolve(getPlayer);
         }
       } catch (error) {
         reject(error);

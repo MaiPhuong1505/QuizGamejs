@@ -16,7 +16,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ButtonControl = ({ progress, role, roomId, question, result, startFunc }) => {
+const ButtonControl = ({ progress, role, roomId, question, result, startFunc, nextFunc }) => {
   console.log('button control', progress, role, roomId, question, result);
   const [open, setOpen] = useState(false);
   const [playerScore, setPlayerScore] = useState(0);
@@ -30,7 +30,11 @@ const ButtonControl = ({ progress, role, roomId, question, result, startFunc }) 
   };
 
   const handleStart = () => {
-    startFunc(PLAYING_PROGRESS.ANSWER_TIME);
+    startFunc();
+  };
+
+  const handleMoveToNextQuestion = () => {
+    nextFunc();
   };
 
   const handleFinish = () => {
@@ -94,7 +98,7 @@ const ButtonControl = ({ progress, role, roomId, question, result, startFunc }) 
           )}
         </div>
         <div className="buttons-control-right">
-          <Button variant="contained" endIcon={<SkipNext />}>
+          <Button variant="contained" endIcon={<SkipNext />} onClick={handleMoveToNextQuestion}>
             NEXT
           </Button>
         </div>

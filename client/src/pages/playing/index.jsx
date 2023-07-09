@@ -26,9 +26,11 @@ const Playing = () => {
   const [quiz, setQuiz] = useState({});
   const [player, setPlayer] = useState({});
   const [result, setResult] = useState({});
+  const [currentQuestion, setCurrentQuestion] = useState({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionList, setQuestionList] = useState([]);
   const [answersChart, setAnswersChart] = useState([]);
+  // let currentQuestionIndex = 0;
   // {
   //   percent: '0%',
   //   type: ANSWER_TYPE.SQUARE,
@@ -55,9 +57,16 @@ const Playing = () => {
   // },
 
   const isWaitingPlayer = progress === PLAYING_PROGRESS.WAITING_PLAYER;
-  let currentQuestion = questionList[currentQuestionIndex];
+  // let currentQuestion = questionList[currentQuestionIndex];
   const changeStartStatus = () => {
     socket.emit('Start_game', { roomId, quiz });
+  };
+  const moveToNextQuestion = () => {
+    if (currentQuestionIndex < questionList.length) {
+      const nextIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(nextIndex);
+      socket.emit('Next_question', { roomId, questionIndex: nextIndex });
+    }
   };
   const getPlayerCb = (player) => {
     setPlayer(player);
@@ -112,6 +121,7 @@ const Playing = () => {
       console.log('Start_game_response_for_host', data);
       setProgress(data.progress);
       setQuestionList(data.questionsResponse);
+      setCurrentQuestion(data?.questionsResponse[0]);
       console.log('time to send host', data.timeToSend);
     });
     socket.on('Start_game_response_for_player', (data) => {
@@ -119,11 +129,15 @@ const Playing = () => {
       setProgress(data?.progress);
       setQuiz(data?.quizResponse);
       setQuestionList(data?.questionsResponse);
+      setCurrentQuestion(data?.questionsResponse[0]);
       setRoomId(data?.roomId);
       console.log('time to send players', data.timeToSend);
     });
     console.log('progress in playing/index.jsx', progress);
   }, [roomId]);
+  // useEffect(() => {
+  //   setCurrentQuestion(questionList[currentQuestionIndex]);
+  // }, [currentQuestionIndex]);
   useEffect(() => {
     if (questionList) {
       socket.on('Question_result_for_host', (data) => {
@@ -142,7 +156,22 @@ const Playing = () => {
         setResult(data);
       });
     }
+  }, [questionList, currentQuestionIndex]);
+
+  useEffect(() => {
+    socket.on('Next_question_response_for_host', (data) => {
+      setProgress(data.progress);
+      setCurrentQuestion(questionList[data.questionIndex]);
+    });
+    socket.on('Next_question_response_for_player', (data) => {
+      setProgress(data.progress);
+      console.log('data.progress in next question', data.progress);
+
+      setCurrentQuestion(questionList[data.questionIndex]);
+      console.log('questionList[data.questionIndex]', questionList[data.questionIndex]);
+    });
   }, [questionList]);
+
   return role === ROLE.PLAYER && progress === PLAYING_PROGRESS.WAITING_PLAYER ? (
     <GameEntry getPlayer={getPlayerCb} />
   ) : (
@@ -161,6 +190,7 @@ const Playing = () => {
         question={currentQuestion}
         result={result}
         startFunc={changeStartStatus}
+        nextFunc={moveToNextQuestion}
       />
       {isWaitingPlayer ? (
         <WaitingPlayer roomId={roomId} />

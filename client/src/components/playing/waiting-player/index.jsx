@@ -6,20 +6,20 @@ const WaitingPlayer = ({ roomId }) => {
   console.log('in Waiting Player component', roomId);
   // let receivedPlayersList = [];
   const [players, setPlayers] = useState([]);
-  // useEffect(() => {
-  //   socket.emit('Get_list_player', roomId);
-  //   socket.on('Get_list_player_response', (playerList) => {
-  //     console.log('Get_list_player_response', playerList);
-  //     setPlayers(playerList);
-  //   });
-  // }, []);
-
   useEffect(() => {
+    socket.emit('Get_list_player', roomId);
     socket.on('Get_list_player_response', (playerList) => {
       console.log('Get_list_player_response', playerList);
       setPlayers(playerList);
     });
   }, []);
+
+  // useEffect(() => {
+  //   socket.on('Get_list_player_response', (playerList) => {
+  //     console.log('Get_list_player_response', playerList);
+  //     setPlayers(playerList);
+  //   });
+  // }, []);
 
   // useEffect(() => {
   //   setPlayers(receivedPlayersList);

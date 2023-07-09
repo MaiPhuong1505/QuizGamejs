@@ -2,30 +2,14 @@ import { Box } from '@mui/material';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './GameHeader.scss';
+import { socket } from '../../socketClient';
+import { PLAYING_PROGRESS, ROLE } from '../../utils/constants';
 
 const Countdown = (props) => {
   const { time, isPlaying } = props;
   // const [ minutes, setMinutes ] = useState(initialMinute);
   const [seconds, setSeconds] = useState(time);
-  console.log('isPlaying', isPlaying);
-  console.log('time', time, seconds);
-  // useEffect(() => {
-  //   if (!time) return;
-  //   // setSeconds(time);
-  //   let myInterval = setInterval(() => {
-  //     console.log(seconds);
-  //     if (seconds > 0) {
-  //       setSeconds((pre) => pre - 1);
-  //     }
-  //     if (seconds === 0 || seconds === undefined) {
-  //       console.log('second 0', seconds);
-  //       clearInterval(myInterval);
-  //     }
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(myInterval);
-  //   };
-  // });
+
   useEffect(() => {
     let intervalId;
     if (time) {
@@ -37,6 +21,7 @@ const Countdown = (props) => {
         setSeconds((prevSeconds) => {
           if (prevSeconds === 0) {
             clearInterval(intervalId);
+            socket.emit('Show_result', PLAYING_PROGRESS.SHOW_RESULT);
             return prevSeconds;
           }
           return prevSeconds - 1;

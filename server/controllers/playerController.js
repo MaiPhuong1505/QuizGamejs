@@ -21,27 +21,32 @@ const playerController = {
     });
   },
   updatePlayer: async (data) => {
-    try {
-      const { playerId, answerSelected, timeToAnswer, timeToSendQuestion, maxTime } = data;
-      if (answerSelected?.isCorrect) {
-        const tAnswer = new Date(timeToAnswer);
-        const tStart = new Date(timeToSendQuestion);
-        const timeDiff = tAnswer.getTime() - tStart.getTime();
-        const maxTimeMs = maxTime * 1000;
-        const score = MAX_SCORE - (MAX_SCORE / maxTimeMs) * timeDiff;
-        console.log('score', playerId, score);
-        const updatedPlayer = await Player.findOneAndUpdate(
-          { _id: playerId },
-          { $inc: { score: score } },
-          { new: true },
-        );
-        console.log('updatedPlayer', updatedPlayer);
-      } else {
-        console.log('wrong answer');
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { playerId, answerSelected, timeToAnswer, timeToSendQuestion, maxTime } = data;
+        if (answerSelected?.isCorrect) {
+          const tAnswer = new Date(timeToAnswer);
+          const tStart = new Date(timeToSendQuestion);
+          const timeDiff = tAnswer.getTime() - tStart.getTime();
+          const maxTimeMs = maxTime * 1000;
+          const score = Math.round(MAX_SCORE - (MAX_SCORE / maxTimeMs) * timeDiff);
+          console.log('score', playerId, score);
+          const updatedPlayer = await Player.findOneAndUpdate(
+            { _id: playerId },
+            { $inc: { score: score } },
+            { new: true },
+          );
+          resolve(updatedPlayer);
+        } else {
+          console.log('wrong answer');
+          const newData = { ...data, _id: playerId };
+          resolve(newData);
+        }
+      } catch (error) {
+        reject(error);
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    });
   },
 };
 

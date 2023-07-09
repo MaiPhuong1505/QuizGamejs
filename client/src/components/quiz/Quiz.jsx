@@ -1,12 +1,17 @@
 import { Delete, Edit, PlayCircleOutline } from '@mui/icons-material';
 import { Box, Button, Divider, IconButton, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { socket } from '../../socketClient';
 
 const Quiz = ({ quiz }) => {
+  const { user } = useSelector((state) => state);
   const navigate = useNavigate();
   const play = () => {
     navigate(`/playing/${quiz._id}`);
+    const data = { quizId: quiz._id, hostId: user.user._id };
+    socket.emit('Get_PIN_code_from_server', data);
   };
   const handleEditQuiz = () => {
     navigate(`/quiz/${quiz._id}`);
@@ -18,9 +23,11 @@ const Quiz = ({ quiz }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h5">{quiz.title}</Typography>
             <Box sx={{ '& button': { mr: 1 } }}>
-              <Button variant="contained" endIcon={<PlayCircleOutline />} onClick={play}>
-                Play
-              </Button>
+              {quiz.questions?.length > 0 && (
+                <Button variant="contained" endIcon={<PlayCircleOutline />} onClick={play}>
+                  Play
+                </Button>
+              )}
               <Button variant="outlined" endIcon={<Edit />} onClick={handleEditQuiz}>
                 Edit
               </Button>

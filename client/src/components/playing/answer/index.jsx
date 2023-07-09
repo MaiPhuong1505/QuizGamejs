@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Answer.scss';
-import { Square, Circle, Star, Favorite } from '@mui/icons-material';
+import { Square, Circle, Star, Favorite, CheckCircleOutline, Cancel } from '@mui/icons-material';
 import { PLAYING_PROGRESS, ROLE } from '../../../utils/constants';
-import { Button, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import { socket } from '../../../socketClient';
 
 export const answerIcon = [
@@ -12,14 +12,20 @@ export const answerIcon = [
   <Favorite color="primary" sx={{ fontSize: '32px' }} />,
 ];
 
-const Answer = ({ question, progress, role, player, time, roomId }) => {
-  console.log('roomId in answer', roomId);
-  const answers = question.answerOptions;
+const Answer = ({ question, progress, role, player, time, roomId, result }) => {
+  // let answers = question.answerOptions;
+  const [answers, setAnswers] = useState(question.answerOptions);
+  console.log('result in answer component', result);
   const [disable, setDisable] = useState(false);
-  const handleClick = (e) => {
+  let customClass;
+  const handleClick = (clickOnAnswer) => (e) => {
+    console.log('answer in click', clickOnAnswer);
     if (role === ROLE.PLAYER) {
-      const valueSelected = e.target.value;
+      const valueSelected = clickOnAnswer;
+      console.log('valueSelected in click answer', valueSelected);
       let answerSelected = answers.find((option) => option.answer === valueSelected);
+      console.log('answerSelected in click answer', answerSelected);
+
       answerSelected = { ...answerSelected, isSelected: true };
       const data = {
         answerSelected,
@@ -28,34 +34,70 @@ const Answer = ({ question, progress, role, player, time, roomId }) => {
         maxTime: time,
         roomId: roomId,
       };
+      console.log('data in click answer', data);
+
       socket.emit('Player_selected_answer', data);
       console.log('answer selected', data);
       setDisable(true);
     }
   };
+  const getIconResult = (answer) => {
+    if (progress === PLAYING_PROGRESS.SHOW_RESULT) {
+      if (answer.isCorrect) {
+        return (
+          <div className="answer-icon">
+            <CheckCircleOutline color="#77dd76" />
+          </div>
+        );
+      } else if (answer.isSelected && !answer.isCorrect) {
+        return (
+          <div className="answer-icon">
+            <Cancel color="#ff6962" />
+          </div>
+        );
+      }
+    }
+    return '';
+  };
+  useEffect(() => {
+    if (Object.keys(result).length > 0) {
+      const receiveAnswers = question.answerOptions.map((option) => {
+        if (option.answer === result?.answerSelected?.answer) {
+          option = { ...option, isSelected: true };
+          return option;
+        }
+        return option;
+      });
+      setAnswers(receiveAnswers);
+      console.log('answers in answers component', answers);
+    }
+  }, [progress, result]);
   return (
     <div className="answer">
       <div className="header"></div>
-      <div className="answer-inner">
+      <Grid container className="answer-inner" spacing={2}>
         {answers.map((answer, index) => {
-          const isInCorrect = progress === PLAYING_PROGRESS.SHOW_RESULT && !answer.isCorrect && answer.isSelected;
-          const isCorrect = progress === PLAYING_PROGRESS.SHOW_RESULT && answer.isCorrect && answer.isSelected;
-          const customClass = `${disable && 'disable'} ${isInCorrect && 'in-correct'} ${isCorrect && 'correct'} `;
+          if (answer.isSelected === undefined) {
+            console.log('answer.isCorrect', answer.isCorrect);
+            const isCorrect = progress === PLAYING_PROGRESS.SHOW_RESULT && answer.isCorrect;
+            customClass = `${disable && 'disable'} ${isCorrect && 'correct'} `;
+          } else {
+            const isInCorrect = progress === PLAYING_PROGRESS.SHOW_RESULT && !answer.isCorrect && answer.isSelected;
+            console.log('answer in map answer/index.jsx', answer);
+            const isCorrect = progress === PLAYING_PROGRESS.SHOW_RESULT && answer.isCorrect;
+            customClass = `${disable && 'disable'} ${isInCorrect && 'in-correct'} ${isCorrect && 'correct'} `;
+          }
           return (
-            <div className="answer" key={index}>
-              <Button
-                className={`answer-item ${customClass}`}
-                value={answer.answer}
-                disabled={disable}
-                onClick={handleClick}
-              >
+            <Grid item xs={12} sm={6} className="answer" key={index}>
+              <Button className={`answer-item ${customClass}`} disabled={disable} onClick={handleClick(answer.answer)}>
                 <div className="answer-icon">{answerIcon[index]}</div>
                 <div className="answer-text">{answer.answer}</div>
+                {getIconResult(answer)}
               </Button>
-            </div>
+            </Grid>
           );
         })}
-      </div>
+      </Grid>
     </div>
   );
 };

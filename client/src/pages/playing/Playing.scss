@@ -6,7 +6,7 @@
 
   .submit {
     display: flex;
-    height: 120px;
+    min-height: 20px;
 
     &-btn {
       margin: 32px 120px 32px auto;

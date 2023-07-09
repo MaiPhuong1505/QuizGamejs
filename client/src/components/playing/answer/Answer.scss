@@ -1,8 +1,8 @@
 .answer-inner {
-  display: flex;
-  padding: 0 120px;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  // display: flex;
+  padding: 0 10vw;
+  // flex-wrap: wrap;
+  // justify-content: space-between;
 
   .answer {
     width: 47%;
@@ -30,6 +30,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        svg {
+          font-size: 36px;
+          width: 36px;
+          height: 36px;
+        }
       }
 
       .answer-text {
@@ -38,6 +43,8 @@
         vertical-align: middle;
         padding: 24px;
         color: black;
+        width: 70%;
+        text-align: left;
       }
     }
 
@@ -46,41 +53,41 @@
     }
 
     &-item.in-correct {
-      scale: 1;
+      opacity: 1;
       background: #ffb6b3;
       border: 1px solid #ff6962;
       .answer-icon {
-        border-right: 1px solid #ff6962;
-
         svg {
           path {
             fill: #ff6962;
           }
-
           rect {
             fill: #ff6962;
           }
         }
       }
+      .answer-text {
+        border-left: 1px solid #ff6962;
+      }
     }
 
     &-item.correct {
-      scale: 1.05;
+      opacity: 1;
       background: #bde7bd;
       border: 1px solid #77dd76;
 
       .answer-icon {
-        border-right: 1px solid #77dd76;
-
         svg {
           path {
             fill: #77dd76;
           }
-
           rect {
             fill: #77dd76;
           }
         }
+      }
+      .answer-text {
+        border-left: 1px solid #77dd76;
       }
     }
   }

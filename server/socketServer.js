@@ -65,7 +65,9 @@ const socketServer = (socket, io) => {
   });
   socket.on('Get_list_player', (roomId) => {
     const room = listRoom.find((r) => r.roomId.toString() === roomId);
-    socket.emit('Get_list_player_response', room.players);
+    if (room) {
+      socket.emit('Get_list_player_response', room.players);
+    }
   });
   socket.on('Start_game', (data) => {
     let room;
@@ -91,11 +93,43 @@ const socketServer = (socket, io) => {
     socket.to(room.roomId.toString()).emit('Start_game_response_for_player', dataForPlayers);
     console.log('Start_game', 'server');
   });
-  socket.on('Player_selected_answer', (data) => {
+  socket.on('Player_selected_answer', async (data) => {
     let room = listRoom.find((r) => r.roomId.toString() === data.roomId);
-    console.log('room in Player_selected_answer', room);
     const sentData = { ...data, timeToSendQuestion: room.timeToSendQuestion };
-    playerController.updatePlayer(sentData);
+    const updatedPlayer = await playerController.updatePlayer(sentData);
+    console.log('updatedPlayer in Player_selected_answer', updatedPlayer);
+
+    let latestScore;
+    room.players = room.players.map((player) => {
+      console.log('player in map Player_selected_answer', player);
+      if (player._id.toString() === updatedPlayer._id.toString()) {
+        latestScore = updatedPlayer.score - player.score;
+        console.log('latestScore', latestScore);
+        player = { ...player._doc, score: updatedPlayer.score, selected: data.answerSelected };
+        return player;
+      }
+      return player;
+    });
+    listRoom = listRoom.map((r) => {
+      if (r.roomId.toString() === room.roomId) {
+        r = room;
+        return r;
+      }
+      return r;
+    });
+    const dataResponseForPlayer = { ...data, latestScore, totalScore: updatedPlayer.score };
+    socket.emit('Question_result_for_player', dataResponseForPlayer);
+    console.log('listroom in Player_selected_answer', listRoom);
+  });
+  socket.on('Show_result', (data) => {
+    // if (data === PLAYING_PROGRESS.SHOW_RESULT) {
+    let room = listRoom.find((r) => r.roomId.toString() === data.roomId);
+    if (room) {
+      console.log('room in Show_result', room);
+      io.to(socket.id).emit('Question_result_for_host', { progress: data.progress, playerResult: room?.players });
+      socket.to(room.roomId.toString()).emit('Show_result_response', PLAYING_PROGRESS.SHOW_RESULT);
+    }
+    // }
   });
 };
 

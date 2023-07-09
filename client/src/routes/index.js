@@ -22,7 +22,6 @@ const publicRoutes = [
   { path: '/createQuiz', component: CreateQuiz },
   { path: '/updateQuiz/:id', component: UpdateQuiz },
   { path: '/game', component: Game, layout: null },
-  { path: '/entry', component: GameEntry, layout: null },
   { path: '/playing', component: Playing, layout: null },
   { path: '/playing/:id', component: Playing, layout: null },
   { path: '/result', component: Result, layout: null },

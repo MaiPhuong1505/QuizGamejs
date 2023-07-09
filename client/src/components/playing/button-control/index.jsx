@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import './ButtonControl.scss';
 import Button from '@mui/material/Button';
 import { PLAYING_PROGRESS, ROLE } from '../../../utils/constants';
@@ -16,8 +16,10 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ButtonControl = ({ progress, role, roomId, quiz }) => {
+const ButtonControl = ({ progress, role, roomId, question, result, startFunc }) => {
+  console.log('button control', progress, role, roomId, question, result);
   const [open, setOpen] = useState(false);
+  const [playerScore, setPlayerScore] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -28,8 +30,18 @@ const ButtonControl = ({ progress, role, roomId, quiz }) => {
   };
 
   const handleStart = () => {
-    socket.emit('Start_game', { roomId, quiz });
+    startFunc(PLAYING_PROGRESS.ANSWER_TIME);
   };
+
+  const handleFinish = () => {
+    socket.emit('Show_result', { progress: PLAYING_PROGRESS.SHOW_RESULT, roomId: roomId });
+  };
+
+  useEffect(() => {
+    if (progress === PLAYING_PROGRESS.SHOW_RESULT) {
+      setPlayerScore(result.totalScore);
+    }
+  }, [result, progress]);
 
   if (progress === PLAYING_PROGRESS.WAITING_PLAYER)
     return (
@@ -54,7 +66,7 @@ const ButtonControl = ({ progress, role, roomId, quiz }) => {
     return (
       <div className="buttons-control">
         <div className="buttons-control-right">
-          <Button variant="contained">Your score: 0</Button>
+          <Button variant="contained">Your score: {playerScore || 0}</Button>
         </div>
       </div>
     );
@@ -64,7 +76,7 @@ const ButtonControl = ({ progress, role, roomId, quiz }) => {
       <div className="buttons-control">
         <div className="buttons-control-left"></div>
         <div className="buttons-control-right">
-          <Button variant="contained" endIcon={<DoneOutline />}>
+          <Button variant="contained" endIcon={<DoneOutline />} onClick={handleFinish}>
             FINISH
           </Button>
         </div>
@@ -75,9 +87,11 @@ const ButtonControl = ({ progress, role, roomId, quiz }) => {
     return (
       <div className="buttons-control">
         <div className="buttons-control-left">
-          <Button variant="contained" endIcon={<ListAlt />} onClick={handleClickOpen}>
-            SHOW EXPLAINATION
-          </Button>
+          {question.explaination && (
+            <Button variant="contained" endIcon={<ListAlt />} onClick={handleClickOpen}>
+              SHOW EXPLAINATION
+            </Button>
+          )}
         </div>
         <div className="buttons-control-right">
           <Button variant="contained" endIcon={<SkipNext />}>
@@ -92,16 +106,12 @@ const ButtonControl = ({ progress, role, roomId, quiz }) => {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+          <DialogTitle>{'Explaination'}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              Let Google help apps determine location. This means sending anonymous location data to Google, even when
-              no apps are running.
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-slide-description">{question?.explaination}</DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
-            <Button onClick={handleClose}>Agree</Button>
+            <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
       </div>

@@ -14,7 +14,7 @@ export const answerIcon = [
 
 const Answer = ({ question, progress, role, player, time, roomId, result }) => {
   // let answers = question.answerOptions;
-  const [answers, setAnswers] = useState(question.answerOptions);
+  const [answers, setAnswers] = useState([]);
   console.log('result in answer component', result);
   const [disable, setDisable] = useState(false);
   let customClass;
@@ -59,6 +59,9 @@ const Answer = ({ question, progress, role, player, time, roomId, result }) => {
     }
     return '';
   };
+  useEffect(() => {
+    setAnswers(question.answerOptions);
+  }, [question]);
   useEffect(() => {
     if (Object.keys(result).length > 0) {
       const receiveAnswers = question.answerOptions.map((option) => {

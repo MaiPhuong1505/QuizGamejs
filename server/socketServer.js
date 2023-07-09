@@ -131,6 +131,27 @@ const socketServer = (socket, io) => {
     }
     // }
   });
+  socket.on('Next_question', (data) => {
+    console.log('data in Next_question', data);
+    let room;
+    listRoom = listRoom.map((r) => {
+      if (r.roomId.toString() === data.roomId) {
+        room = r;
+        return { ...r, timeToSendQuestion: new Date(Date.now()) };
+      }
+      return r;
+    });
+    socket.emit('Next_question_response_for_host', {
+      progress: PLAYING_PROGRESS.ANSWER_TIME,
+      questionIndex: data.questionIndex,
+    });
+    const dataForPlayers = {
+      progress: PLAYING_PROGRESS.ANSWER_TIME,
+      questionIndex: data.questionIndex,
+      roomId: room.roomId,
+    };
+    socket.to(room.roomId.toString()).emit('Next_question_response_for_player', dataForPlayers);
+  });
 };
 
 export default socketServer;

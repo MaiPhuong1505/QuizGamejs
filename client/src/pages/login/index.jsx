@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { KeyboardBackspace } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../../redux/actions/userAction';
+import { quizServices } from '../../services/quizServices';
 
 const Login = () => {
   const [signUp, setSignUp] = useState(false);
@@ -16,8 +17,13 @@ const Login = () => {
   const { user } = useSelector((state) => state);
   // console.log('user', user);
   useEffect(() => {
-    if (user.token) navigate('/profile');
-    else navigate('/login');
+    if (user.token && sessionStorage.getItem('flashcardData')) {
+      navigate('/flashcard');
+    } else if (user.token) {
+      navigate('/profile');
+    } else {
+      navigate('/login');
+    }
   }, [user.token]);
 
   const validate = (key, values) => {
@@ -33,7 +39,7 @@ const Login = () => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const { fullname, email, password, username } = userData;
     if (signUp && (!fullname || !email || !password || !username)) {

@@ -63,6 +63,11 @@ const Answer = ({ question, progress, role, player, time, roomId, result }) => {
     setAnswers(question.answerOptions);
   }, [question]);
   useEffect(() => {
+    if (progress === PLAYING_PROGRESS.ANSWER_TIME) {
+      setDisable(false);
+    }
+  }, [progress]);
+  useEffect(() => {
     if (Object.keys(result).length > 0) {
       const receiveAnswers = question.answerOptions.map((option) => {
         if (option.answer === result?.answerSelected?.answer) {

@@ -20,8 +20,8 @@ const Countdown = (props) => {
       intervalId = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds === 0) {
-            clearInterval(intervalId);
             socket.emit('Show_result', PLAYING_PROGRESS.SHOW_RESULT);
+            clearInterval(intervalId);
             return prevSeconds;
           }
           return prevSeconds - 1;

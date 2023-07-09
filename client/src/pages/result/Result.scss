@@ -1,64 +1,72 @@
+.result-player-role {
+  zoom: 0.8;
+}
 .result {
-  background-size: cover;
   width: 100%;
-  background: #ebedff;
+  background: #d1d2fa;
   height: 100vh;
 
+  .result-inner-player-role {
+    background-size: 80% !important;
+  }
   .result-inner {
     display: flex;
-    background: #ebedff url('../../assets/podium small.png') no-repeat center center;
-    height: 900px;
+    background-image: url('../../assets/podium small.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
     align-items: center;
     flex-direction: column;
 
     .result-rank {
-      height: 940px;
+      height: 100vh;
       display: flex;
-      padding-top: 212px;
       justify-content: space-between;
-      width: 1200px;
+      width: 57vw;
 
       .player {
         font-family: 'Inter';
         font-style: normal;
         font-weight: 700;
-        font-size: 80px;
-        line-height: 97px;
+        font-size: 48px;
         color: #4b56a2;
+        text-align: center;
       }
 
       .player-score {
-        margin-top: 24px;
         width: 100%;
         background: #4b56a2;
         border-radius: 15px;
         font-family: 'Inter';
         font-style: normal;
         font-weight: 700;
-        font-size: 80px;
-        line-height: 97px;
-        align-items: center;
+        font-size: 48px;
         text-align: center;
         color: #ffffff;
       }
 
       .result-rank-first {
-        padding-top: 64px;
+        margin-top: 21vh;
+        width: 30%;
+      }
+      .result-rank-second {
+        margin-top: 27vh;
+        width: 30%;
       }
 
       .result-rank-third {
-        padding-top: 100px;
+        margin-top: 31vh;
+        width: 30%;
       }
     }
   }
   .result-score {
     margin-top: -5%;
+    padding-bottom: 4%;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 72px;
-    line-height: 87px;
-    align-items: center;
+    font-size: 56px;
     text-align: center;
     color: #4b56a2;
     background: #ebedff;
@@ -66,5 +74,12 @@
     p {
       margin: 12px 0;
     }
+  }
+  .btn-save-quiz,
+  .btn-exit {
+    margin-top: 30px;
+    margin-right: 40px;
+    scale: 1.2;
+    align-self: flex-end;
   }
 }

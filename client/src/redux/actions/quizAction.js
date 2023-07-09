@@ -11,7 +11,7 @@ export const getQuiz = (id, token) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: err.response.data.msg },
+      payload: { error: error.response.data.msg },
     });
   }
 };

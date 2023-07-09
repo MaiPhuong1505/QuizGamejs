@@ -1,3 +1,4 @@
+import GameHistory from '../models/gameHistoryModel.js';
 import Player from '../models/playerModel.js';
 import { MAX_SCORE } from '../utils/constants.js';
 
@@ -13,6 +14,7 @@ const playerController = {
           resolve({ msg: `Player ${nickname} exists in this quiz, please choose another name` });
         } else {
           const newPlayer = await Player.create(data);
+          await GameHistory.findOneAndUpdate({ _id: gameHistoryId }, { $inc: { numberOfPlayers: 1 } });
           resolve(newPlayer);
         }
       } catch (error) {
@@ -45,6 +47,20 @@ const playerController = {
       } catch (error) {
         reject(error);
         console.log(error.message);
+      }
+    });
+  },
+  getTopPlayersInHistory: async (historyId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const players = await Player.find({ gameHistoryId: historyId }).sort({ score: 'desc' }).exec();
+        if (players.length > 3) {
+          resolve(players.slice(0, 3));
+        } else {
+          resolve(players);
+        }
+      } catch (error) {
+        reject(error);
       }
     });
   },

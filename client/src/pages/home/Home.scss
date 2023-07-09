@@ -3,27 +3,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600&display=swap');
 
 .home {
-  /* background: url('../../../src/assets/Creative ways to stay close in a remote working world.png');
+  background-image: url('../../../src/assets/Creative ways to stay close in a remote working world.png');
   background-repeat: no-repeat;
-  background-size: auto; */
-  padding: 10px 15vw;
-}
+  background-size: cover;
+  background-position: center;
+  height: 89vh;
+  .home-inner {
+    padding: 10px 15vw;
+    .brand-home {
+      margin-top: 50px !important;
+      font-family: 'Comfortaa' !important;
+      font-size: xxx-large !important;
+      text-shadow: 3px 3px 3px lightgrey;
+    }
 
-.brand-home {
-  margin-top: 50px !important;
-  font-family: 'Comfortaa' !important;
-  font-size: xxx-large !important;
-  text-shadow: 3px 3px 3px lightgrey;
-}
-
-.slogan {
-  font-family: 'Itim' !important;
-  font-size: x-large !important;
-}
-
-.home img {
-  width: 100%;
-  overflow: hidden;
+    .slogan {
+      font-family: 'Itim' !important;
+      font-size: x-large !important;
+    }
+  }
 }
 
 .intro-text-container {

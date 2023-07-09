@@ -48,7 +48,7 @@ const socketServer = (socket, io) => {
   socket.on('Player_join', async (newPlayerInGame) => {
     const gameHistoryId = newPlayerInGame.gameHistoryId;
     const room = listRoom.find((r) => r.roomId.toString() === gameHistoryId);
-    if (room.isLocked) {
+    if (room?.isLocked) {
       socket.emit('Join_response', `Room is not available`);
     } else {
       const newPlayer = await playerController.createPlayer(newPlayerInGame);
@@ -105,7 +105,7 @@ const socketServer = (socket, io) => {
       if (player._id.toString() === updatedPlayer._id.toString()) {
         latestScore = updatedPlayer.score - player.score;
         console.log('latestScore', latestScore);
-        player = { ...player._doc, score: updatedPlayer.score, selected: data.answerSelected };
+        player._doc = { ...player._doc, score: updatedPlayer.score, selected: data.answerSelected };
         return player;
       }
       return player;
@@ -151,6 +151,15 @@ const socketServer = (socket, io) => {
       roomId: room.roomId,
     };
     socket.to(room.roomId.toString()).emit('Next_question_response_for_player', dataForPlayers);
+  });
+  socket.on('End_game', async (roomId) => {
+    const room = listRoom.find((r) => r.roomId.toString() === roomId);
+    const topPlayers = await playerController.getTopPlayersInHistory(roomId);
+    console.log('top players', topPlayers);
+    socket.emit('End_game_response_for_host', { progress: PLAYING_PROGRESS.END, topPlayers: topPlayers });
+    socket
+      .to(room.roomId.toString())
+      .emit('End_game_response_for_player', { progress: PLAYING_PROGRESS.END, topPlayers: topPlayers });
   });
 };
 

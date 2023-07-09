@@ -1,7 +1,12 @@
 import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const FlashCard = () => {
+  useEffect(() => {
+    if (sessionStorage.getItem('flashcardData')) {
+      sessionStorage.removeItem('flashcardData');
+    }
+  }, []);
   const flashCards = [
     {
       _id: 1,

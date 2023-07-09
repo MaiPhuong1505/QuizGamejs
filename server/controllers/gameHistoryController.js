@@ -37,16 +37,16 @@ const gameHistoryController = {
       }
     });
   },
-  getHistoryByCode: async (socket, data) => {
-    try {
-      const history = await GameHistory.findOne({ code: data });
-      // console.log('history', history);
-      socket.emit('Get_game', history);
-      console.log('istory', history);
-    } catch (error) {
-      console.log('newGameHistory', error.message);
-    }
-  },
+  // getHistoryByCode: async (socket, data) => {
+  //   try {
+  //     const history = await GameHistory.findOne({ code: data });
+  //     // console.log('history', history);
+  //     socket.emit('Get_game', history);
+  //     console.log('istory', history);
+  //   } catch (error) {
+  //     console.log('newGameHistory', error.message);
+  //   }
+  // },
   getAllGameHistories: async (req, res) => {
     try {
       const allGameHistories = await GameHistory.find({ hostId: req.body.user });
@@ -58,7 +58,7 @@ const gameHistoryController = {
       return res.status(500).json({ msg: error.message });
     }
   },
-  getGameHistoryById: async (req, res) => {
+  getGameHistoryByIdAPI: async (req, res) => {
     try {
       const gameHistory = await GameHistory.find({ _id: req.body.gameHistoryId });
       res.json({

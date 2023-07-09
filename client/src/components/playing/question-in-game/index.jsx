@@ -19,12 +19,13 @@ const countSelectedAnswers = (question, selectedData) => {
       const index = counts.findIndex((c) => c.answer === d.selected.answer);
       console.log('index countSelectedAnswers', index);
       if (index === -1) {
-        counts.push({
-          answer: d.selected.answer,
-          count: 1,
-          optionIndex: counts.length,
-          percent: Math.round((1 / counts.length) * 100),
-        });
+        console.log("User didn't select an answer");
+        // counts.push({
+        //   answer: d.selected.answer,
+        //   count: 1,
+        //   optionIndex: counts.length,
+        //   percent: Math.round((1 / counts.length) * 100),
+        // });
       } else {
         counts[index].count++;
       }
@@ -50,12 +51,13 @@ const countSelectedAnswers = (question, selectedData) => {
   return chartData;
 };
 const QuestionInGame = ({ question, progress, role, answersChart, result }) => {
-  const isCorrect = result.latestScore;
-  console.log('question', question);
+  const isCorrect = result?.answerSelected?.isCorrect;
+  const isSelected = result?.answerSelected?.isSelected;
+  console.log('Answer chart - question in game', answersChart);
+  console.log('Result - question in game', result);
   const [chart, setChart] = useState(answersChart);
   const [questionState, setQuestionState] = useState(question);
   const [resultState, setResultState] = useState(result);
-  console.log('question in game', result);
   const isAnswerTime = progress === PLAYING_PROGRESS.ANSWER_TIME;
   const isAdminResult = progress === PLAYING_PROGRESS.SHOW_RESULT && role === ROLE.HOST;
   const isPlayerResult = progress === PLAYING_PROGRESS.SHOW_RESULT && role === ROLE.PLAYER;

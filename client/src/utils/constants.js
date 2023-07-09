@@ -9,6 +9,11 @@ export const QUIZ_TYPE = {
   QUIZ: 'Quiz',
   FLASHCARD: 'Flashcard',
 };
+export const QUESTION_DIFFICULTY = {
+  EASY: 'Easy',
+  MEDIUM: 'Medium',
+  DIFFICULT: 'Difficult',
+};
 export const PLAYING_PROGRESS = {
   WAITING_PLAYER: 'WAITING_PLAYER',
   ANSWER_TIME: 'ANSWER_TIME',

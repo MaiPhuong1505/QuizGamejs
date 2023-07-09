@@ -1,10 +1,10 @@
-import { GLOBALTYPES } from '../actions/globalTypes';
+import { QUIZ_TYPES } from '../actions/quizAction';
 
 const initialState = {};
 
 const quizReducers = (state = initialState, action) => {
   switch (action.type) {
-    case GLOBALTYPES.QUIZ:
+    case QUIZ_TYPES.GET_QUIZ:
       return action.payload;
     default:
       return state;

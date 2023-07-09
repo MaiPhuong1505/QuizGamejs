@@ -1,5 +1,6 @@
 import Question from '../models/questionModel.js';
 import Quiz from '../models/quizModel.js';
+import Category from '../models/categoryModel.js';
 import { QUIZ_TYPE } from '../utils/constants.js';
 
 const getRandomQuestions = (questionsInQuiz, numberOfQues) => {
@@ -20,8 +21,10 @@ const quizController = {
   createQuiz: async (req, res) => {
     try {
       const { title, description, visibility, category, type, user, imageURL } = req.body;
-      const newQuiz = { title, description, visibility, category, type, user, imageURL };
-
+      let newQuiz = { title, description, visibility, category, type, user };
+      if (imageURL) {
+        newQuiz = { ...newQuiz, imageURL };
+      }
       const insertedQuiz = await Quiz.create(newQuiz);
 
       res.json({
@@ -90,13 +93,16 @@ const quizController = {
   },
   getQuizById: async (req, res) => {
     try {
-      const quiz = await Quiz.findOne({ _id: req.params.quizId });
-      const questionIdList = quiz.questions;
+      const foundQuiz = await Quiz.findOne({ _id: req.params.quizId });
+      const questionIdList = foundQuiz.questions;
       const questionList = await Question.find({ _id: { $in: questionIdList } }).exec();
-      quiz.questions = questionList;
+      const foundCategory = await Category.findOne({ _id: foundQuiz.category });
+      foundQuiz.questions = questionList;
+      const sentData = { ...foundQuiz._doc, category: foundCategory };
+      console.log('sentData in getQuizById', sentData);
       res.json({
         msg: `Get quiz with id ${req.params.quizId}`,
-        quiz,
+        quiz: sentData,
       });
     } catch (error) {
       return res.status(500).json({ msg: error.message });

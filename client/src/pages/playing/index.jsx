@@ -12,6 +12,7 @@ import { useParams } from 'react-router';
 import { quizServices } from '../../services/quizServices';
 import GameEntry from '../game-entry';
 import { Button } from '@mui/material';
+import Result from '../result';
 
 const Playing = () => {
   const { user } = useSelector((state) => state);
@@ -30,31 +31,7 @@ const Playing = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionList, setQuestionList] = useState([]);
   const [answersChart, setAnswersChart] = useState([]);
-  // let currentQuestionIndex = 0;
-  // {
-  //   percent: '0%',
-  //   type: ANSWER_TYPE.SQUARE,
-  //   answer: '',
-  //   count: '0',
-  // },
-  // {
-  //   percent: '0%',
-  //   type: ANSWER_TYPE.CIRCLE,
-  //   answer: '',
-  //   count: '0',
-  // },
-  // {
-  //   percent: '0%',
-  //   type: ANSWER_TYPE.HEART,
-  //   answer: '',
-  //   count: '0',
-  // },
-  // {
-  //   percent: '0%',
-  //   type: ANSWER_TYPE.STAR,
-  //   answer: '',
-  //   count: '0',
-  // },
+  const [topPlayers, setTopPlayers] = useState([]);
 
   const isWaitingPlayer = progress === PLAYING_PROGRESS.WAITING_PLAYER;
   // let currentQuestion = questionList[currentQuestionIndex];
@@ -62,10 +39,12 @@ const Playing = () => {
     socket.emit('Start_game', { roomId, quiz });
   };
   const moveToNextQuestion = () => {
-    if (currentQuestionIndex < questionList.length) {
+    if (currentQuestionIndex < questionList.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       socket.emit('Next_question', { roomId, questionIndex: nextIndex });
+    } else {
+      socket.emit('End_game', roomId);
     }
   };
   const getPlayerCb = (player) => {
@@ -154,6 +133,7 @@ const Playing = () => {
       socket.on('Question_result_for_player', (data) => {
         console.log('Question_result_for_player data', data);
         setResult(data);
+        setPlayer({ ...player, score: data.totalScore });
       });
     }
   }, [questionList, currentQuestionIndex]);
@@ -168,58 +148,79 @@ const Playing = () => {
       console.log('data.progress in next question', data.progress);
 
       setCurrentQuestion(questionList[data.questionIndex]);
+      setCurrentQuestionIndex(data.questionIndex);
       console.log('questionList[data.questionIndex]', questionList[data.questionIndex]);
     });
   }, [questionList]);
 
+  useEffect(() => {
+    socket.on('End_game_response_for_host', (data) => {
+      console.log('End_game_response_for_host', data);
+      setProgress(data.progress);
+      setTopPlayers(data.topPlayers);
+    });
+    socket.on('End_game_response_for_player', (data) => {
+      console.log('End_game_response_for_player', data);
+      console.log('End_game_response_for_player quiz', quiz);
+      setProgress(data.progress);
+      setTopPlayers(data.topPlayers);
+    });
+  }, []);
+
   return role === ROLE.PLAYER && progress === PLAYING_PROGRESS.WAITING_PLAYER ? (
     <GameEntry getPlayer={getPlayerCb} />
   ) : (
-    <div className="playing">
-      <GameHeader
-        progress={progress}
-        pinCode={pinCode}
-        quiz={quiz}
-        time={currentQuestion?.time}
-        currentIndex={currentQuestionIndex}
-      />
-      <ButtonControl
-        progress={progress}
-        role={role}
-        roomId={roomId}
-        question={currentQuestion}
-        result={result}
-        startFunc={changeStartStatus}
-        nextFunc={moveToNextQuestion}
-      />
-      {isWaitingPlayer ? (
-        <WaitingPlayer roomId={roomId} />
+    <div>
+      {progress === PLAYING_PROGRESS.END ? (
+        <Result role={role} roomId={roomId} player={player} quiz={quiz} topPlayers={topPlayers} />
       ) : (
-        <>
-          <QuestionInGame
-            question={currentQuestion}
-            answersChart={answersChart}
+        <div className="playing">
+          <GameHeader
             progress={progress}
-            role={role}
-            result={result}
-          />
-          {
-            <div className="submit">
-              {role === ROLE.PLAYER && currentQuestion?.isMultipleAnswer && (
-                <Button className="submit-btn">SUBMIT</Button>
-              )}
-            </div>
-          }
-          <Answer
-            question={currentQuestion}
-            progress={progress}
-            role={role}
-            player={player}
+            pinCode={pinCode}
+            quiz={quiz}
             time={currentQuestion?.time}
-            roomId={roomId}
-            result={result}
+            currentIndex={currentQuestionIndex}
           />
-        </>
+          <ButtonControl
+            progress={progress}
+            role={role}
+            roomId={roomId}
+            question={currentQuestion}
+            result={result}
+            startFunc={changeStartStatus}
+            nextFunc={moveToNextQuestion}
+          />
+          {isWaitingPlayer ? (
+            <WaitingPlayer roomId={roomId} />
+          ) : (
+            <>
+              <QuestionInGame
+                question={currentQuestion}
+                answersChart={answersChart}
+                progress={progress}
+                role={role}
+                result={result}
+              />
+              {
+                <div className="submit">
+                  {role === ROLE.PLAYER && currentQuestion?.isMultipleAnswer && (
+                    <Button className="submit-btn">SUBMIT</Button>
+                  )}
+                </div>
+              }
+              <Answer
+                question={currentQuestion}
+                progress={progress}
+                role={role}
+                player={player}
+                time={currentQuestion?.time}
+                roomId={roomId}
+                result={result}
+              />
+            </>
+          )}
+        </div>
       )}
     </div>
   );

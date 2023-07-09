@@ -152,5 +152,23 @@ const quizController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  saveFlashcards: async (req, res) => {
+    try {
+      const { title, description, category, questions, user } = req.body;
+      let newFlashcard = { title, description, category, questions, type: QUIZ_TYPE.FLASHCARD, user };
+      const response = await Quiz.create(newFlashcard);
+
+      res.json({
+        msg: 'Save Flashcard!',
+        newFlashcard: {
+          ...newFlashcard,
+          flashcardId: response._id,
+          user: req.user,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 export default quizController;

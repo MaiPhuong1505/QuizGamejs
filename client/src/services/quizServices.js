@@ -25,4 +25,7 @@ export const quizServices = {
   updateQuestion: async (questionId, data, token) => {
     return await putDataAPI(`quiz/${questionId}`, data, token);
   },
+  saveFlashcard: async (data, token) => {
+    return await postDataAPI(`flashcards/save`, data, token);
+  },
 };

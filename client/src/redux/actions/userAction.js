@@ -1,5 +1,6 @@
 import { GLOBALTYPES } from './globalTypes';
 import { postDataAPI } from '../../utils/fetchData';
+import { persistor } from '../store';
 
 export const login = (data) => async (dispatch) => {
   try {
@@ -7,6 +8,12 @@ export const login = (data) => async (dispatch) => {
     console.log('login');
     const res = await postDataAPI('login', data);
     console.log('data login', res);
+    if (sessionStorage.getItem('flashcardData')) {
+      const tempData = JSON.parse(sessionStorage.getItem('flashcardData'));
+      const sentData = { ...tempData, user: res?.data?.user?._id };
+      const newFlashcards = await postDataAPI(`flashcards/save`, sentData, res?.data?.access_token);
+      console.log('newFlashcards', newFlashcards);
+    }
     dispatch({
       type: GLOBALTYPES.AUTH,
       payload: {
@@ -94,7 +101,15 @@ export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem('firstLogin');
     await postDataAPI('logout');
-    window.location.href = '/';
+    // window.location.href = '/';
+    dispatch({
+      type: GLOBALTYPES.AUTH,
+      payload: {
+        token: '',
+        user: null,
+      },
+    });
+    persistor.purge();
   } catch (err) {
     dispatch({
       type: GLOBALTYPES.ALERT,

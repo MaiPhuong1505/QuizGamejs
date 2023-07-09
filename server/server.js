@@ -10,9 +10,9 @@ import { Server } from 'socket.io';
 import socketServer from './socketServer.js';
 
 // import cookieParser from 'cookie-parser';
-
+const domain = process.env.DOMAIN || 'http://localhost:3000';
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: [domain],
 };
 const app = express();
 

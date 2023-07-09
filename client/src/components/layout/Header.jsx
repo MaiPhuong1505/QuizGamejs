@@ -4,11 +4,17 @@ import './Layout.css';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/actions/userAction';
+import { useNavigate } from 'react-router-dom';
 
 // import { NavLink, Link } from 'react-router-dom'
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   const { user } = useSelector((state) => state);
   return (
@@ -68,7 +74,7 @@ const Header = () => {
       {user.token ? (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography sx={{ color: 'black' }}>Hi, {user.user.username}</Typography>
-          <Button onClick={() => dispatch(logout())}>Logout</Button>
+          <Button onClick={() => handleLogout()}>Logout</Button>
         </Box>
       ) : (
         <>

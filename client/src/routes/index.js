@@ -11,6 +11,16 @@ import UpdateQuiz from '../pages/quiz/UpdateQuiz';
 import UpdateQuestion from '../components/question/UpdateQuestion';
 import NotFound from '../pages/error/NotFound';
 import ResultAnonymous from '../pages/result/ResultAnonymous';
+import FlashCardContent from '../pages/flash-card-content';
+import Quiz from '../pages/quiz';
+import Result from '../pages/result';
+import CreateQuestion from '../components/question/CreateQuestion';
+import UpdateQuiz from '../pages/quiz/UpdateQuiz';
+import UpdateQuestion from '../components/question/UpdateQuestion';
+import NotFound from '../pages/error/NotFound';
+import ResultAnonymous from '../pages/result/ResultAnonymous';
+import ViewResult from '../pages/view-result';
+import ViewResultDetail from '../pages/view-result-detail';
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -27,6 +37,10 @@ const publicRoutes = [
   { path: '/flashcard', component: FlashCard },
   { path: '/createQuestion', component: CreateQuestion },
   { path: '/updateQuestion/:id', component: UpdateQuestion },
+  { path: '/flashcard-content', component: FlashCardContent, layout: null },
+  { path: '/view-result', component: ViewResult, layout: null },
+  { path: '/view-result-detail', component: ViewResultDetail, layout: null },
+  { path: '/question', component: CreateQuestion },
 ];
 
 const privateRoutes = [];

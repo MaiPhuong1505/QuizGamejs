@@ -170,5 +170,21 @@ const quizController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  getFlashcardById: async (req, res) => {
+    try {
+      const foundFlashcard = await Quiz.findOne({ _id: req.params.id });
+      const questionIdList = foundFlashcard.questions;
+      const questionList = await Question.find({ _id: { $in: questionIdList } }).exec();
+      foundFlashcard.questions = questionList;
+      const sentData = { ...foundFlashcard._doc };
+      console.log('sentData in getFlashcardById', sentData);
+      res.json({
+        msg: `Get flashcard with id ${req.params.quizId}`,
+        flashcard: sentData,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 export default quizController;

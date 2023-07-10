@@ -1,0 +1,104 @@
+.flash-card-content {
+  .scene {
+    display: inline-block;
+    width: 70vw;
+    height: 50vh;
+    /*   border: 1px solid #CCC; */
+    margin: 40px 0;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    //   max-width: 1392px;
+    //   max-height: 637px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transform-origin: center right;
+    transition: transform 1s;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0px 0px 30px 5px rgba(0, 0, 0, 0.07);
+  }
+
+  .flash-card-inner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .card.is-flipped {
+    transform: translateX(-100%) rotateY(-180deg);
+  }
+
+  .card__face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 28px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card__face--front {
+  }
+
+  .card__face--back {
+    transform: rotateY(180deg);
+  }
+
+  .card__face--content {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card__face--footer {
+    margin-top: auto;
+    color: #00b8f1;
+    text-align: center;
+    // h5 {
+    //   color: #00b8f1;
+    //   text-align: center;
+    //   font-size: 22px;
+    //   font-family: Inter;
+    //   font-style: normal;
+    //   font-weight: 400;
+    //   line-height: normal;
+    //   margin: 12px;
+    // }
+  }
+
+  .next__card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-inner {
+      display: flex;
+      width: 270px;
+      justify-content: space-around;
+    }
+
+    &-text.MuiTypography-h5 {
+      color: #000;
+      text-align: center;
+      font-size: 28px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      margin: -5px 10px 0 0;
+    }
+
+    &-icon.MuiSvgIcon-root {
+      cursor: pointer;
+      font-size: 32px;
+    }
+  }
+}

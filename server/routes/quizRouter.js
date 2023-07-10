@@ -7,6 +7,7 @@ quizRouter.post('/quiz/autoCreate', quizController.createQuizAuto);
 quizRouter.post('/flashcards/save', quizController.saveFlashcards);
 quizRouter.get('/quiz/all/:userId', quizController.getQuizzes);
 quizRouter.get('/flashcards/:userId', quizController.getQuizzesTypeFlashcard);
+quizRouter.get('/flashcard/:id', quizController.getFlashcardById);
 quizRouter.get('/quiz/:quizId', quizController.getQuizById);
 quizRouter.put('/quiz/:quizId', quizController.updateQuiz);
 quizRouter.delete('/quiz/:quizId', quizController.deleteQuiz);

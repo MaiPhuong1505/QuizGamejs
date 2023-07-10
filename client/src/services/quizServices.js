@@ -28,4 +28,10 @@ export const quizServices = {
   saveFlashcard: async (data, token) => {
     return await postDataAPI(`flashcards/save`, data, token);
   },
+  getAllFlashcards: async (userId, token) => {
+    return await getDataAPI(`flashcards/${userId}`, token);
+  },
+  getFlashcardById: async (flashcardId, token) => {
+    return await getDataAPI(`flashcard/${flashcardId}`, token);
+  },
 };

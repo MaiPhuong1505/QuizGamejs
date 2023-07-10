@@ -1,10 +1,10 @@
 import { default as React } from 'react';
-import './style.scss';
+import './viewHistory.scss';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 
-const ViewResult = () => {
+const ViewHistory = () => {
   return (
     <>
       <Box className="view__result">
@@ -65,4 +65,4 @@ const ViewResult = () => {
   );
 };
 
-export default ViewResult;
+export default ViewHistory;

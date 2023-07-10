@@ -9,11 +9,11 @@ import {
 } from '@mui/icons-material';
 import { Divider, Grid, Typography } from '@mui/material';
 import { default as React } from 'react';
-import './style.scss';
+import './viewHistoryDetail.scss';
 
 import { Box } from '@mui/material';
 
-const ViewResultDetail = () => {
+const ViewHistoryDetail = () => {
   return (
     <>
       <Box className="view__result__detail">
@@ -123,4 +123,4 @@ const ViewResultDetail = () => {
   );
 };
 
-export default ViewResultDetail;
+export default ViewHistoryDetail;

@@ -143,7 +143,9 @@ const quizController = {
         user: req.params.userId,
         $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
         type: { $in: [QUIZ_TYPE.FLASHCARD] },
-      });
+      })
+        .sort({ createdAt: 'desc' })
+        .exec();
       res.json({
         msg: `All flashcards of userId ${req.body.user}`,
         flashcards,

@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { socket } from '../../socketClient';
+import { QUIZ_VISIBILITY } from '../../utils/constants';
 
 const Quiz = ({ quiz }) => {
   const { user } = useSelector((state) => state);
@@ -23,7 +24,7 @@ const Quiz = ({ quiz }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h5">{quiz.title}</Typography>
             <Box sx={{ '& button': { mr: 1 } }}>
-              {quiz.questions?.length > 0 && (
+              {quiz.questions?.length > 0 && quiz.visibility === QUIZ_VISIBILITY.PUBLIC && (
                 <Button variant="contained" endIcon={<PlayCircleOutline />} onClick={play}>
                   Play
                 </Button>

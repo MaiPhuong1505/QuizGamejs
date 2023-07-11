@@ -8,11 +8,12 @@ import categoryRouter from './routes/categoryRouter.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import socketServer from './socketServer.js';
+import historyRouter from './routes/historyRouter.js';
 
 // import cookieParser from 'cookie-parser';
 const domain = process.env.DOMAIN || 'http://localhost:3000';
 const corsOptions = {
-  origin: [domain],
+  origin: '*',
 };
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api', userRouter);
 app.use('/api', quizRouter);
 app.use('/api', questionRouter);
 app.use('/api', categoryRouter);
+app.use('/api', historyRouter);
 
 httpServer.listen(5001, () => {
   try {

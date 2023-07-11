@@ -12,6 +12,8 @@ import { getQuiz } from '../../redux/actions/quizAction.js';
 const QuizPage = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state);
+  const { quizReducer } = useSelector((state) => state);
+  console.log('storeQuiz', quizReducer.storeQuiz);
   const dispatch = useDispatch();
 
   const [quiz, setQuiz] = useState({});
@@ -48,6 +50,12 @@ const QuizPage = () => {
       dispatch(getQuiz(id, user.token));
     }
   }, []);
+  useEffect(() => {
+    setQuiz(quizReducer.storeQuiz);
+  }, [quizReducer.storeQuiz]);
+  useEffect(() => {
+    setQuestions(quiz.questions);
+  }, [quiz]);
   // console.log('response.data.quiz', quiz.questions[0]);
   return (
     <>
@@ -56,17 +64,17 @@ const QuizPage = () => {
           <Paper sx={{ marginRight: 3, padding: 2, maxWidth: '28vw' }}>
             <Stack spacing={2}>
               <Box sx={{ display: 'flex', justifyContent: 'center', border: '2px dashed #D9D9D9' }}>
-                {Object.keys(quiz).length > 0 ? (
-                  <img src={quiz.imageURL} style={{ maxWidth: '70%', height: 'auto' }} />
-                ) : (
+                {/* {Object.keys(quiz).length > 0 ? ( */}
+                <img src={quiz?.imageURL} style={{ maxWidth: '70%', height: 'auto' }} />
+                {/* ) : (
                   <Skeleton />
-                )}
+                )} */}
               </Box>
               {/* <Divider sx={{ marginY: 2, border: '1px dashed #FAFAFA' }} /> */}
-              <Typography variant="h5">{quiz.title}</Typography>
-              <Typography>{quiz.description}</Typography>
-              <Typography>{quiz.visibility}</Typography>
-              <Typography>{quiz.category?.categoryName}</Typography>
+              <Typography variant="h5">{quiz?.title}</Typography>
+              <Typography>{quiz?.description}</Typography>
+              <Typography>{quiz?.visibility}</Typography>
+              <Typography>{quiz?.category?.categoryName}</Typography>
               <Button variant="contained" endIcon={<Edit />} onClick={handleEditQuiz}>
                 Edit
               </Button>
@@ -82,41 +90,47 @@ const QuizPage = () => {
             </Button>
           </Box>
           <Stack>
-            {Object.keys(quiz).length > 0 ? (
-              questions.map((question, index) => (
-                <Paper sx={{ padding: 2, marginBottom: 2 }}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* {Object.keys(quiz).length > 0 ? ( */}
+            {questions?.map((question, index) => (
+              <Paper sx={{ padding: 2, marginBottom: 2 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Box>
                         <Typography variant="h6">Question {index + 1}</Typography>
-                        <Box sx={{ '& button': { mr: 1 } }}>
-                          <Button variant="contained" endIcon={<Edit />} onClick={handleEditQuestion}>
-                            Edit
-                          </Button>
-                          <Button variant="outlined" endIcon={<Delete />} color="error">
-                            Delete
-                          </Button>
-                        </Box>
+                        <Typography>{question.time} seconds</Typography>
+                        <Typography>{question.difficulty}</Typography>
                       </Box>
-                      <Divider sx={{ marginTop: 2 }} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      {question.question}
-                    </Grid>
-                    {question.answerOptions.map((option) => (
-                      <Grid item xs={6}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          {option.isCorrect ? <CheckCircle color="success" /> : <CircleOutlined color="primary" />}
-                          <Typography>{option.answer}</Typography>
-                        </Box>
-                      </Grid>
-                    ))}
+                      <Box sx={{ '& button': { mr: 1 } }}>
+                        <Button variant="contained" endIcon={<Edit />} onClick={handleEditQuestion}>
+                          Edit
+                        </Button>
+                        <Button variant="outlined" endIcon={<Delete />} color="error">
+                          Delete
+                        </Button>
+                      </Box>
+                    </Box>
+                    <Divider sx={{ marginTop: 2 }} />
                   </Grid>
-                </Paper>
-              ))
-            ) : (
+                  <Grid item xs={12}>
+                    {question.question}
+                  </Grid>
+                  {question.answerOptions.map((option) => (
+                    <Grid item xs={6}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {option.isCorrect ? <CheckCircle color="success" /> : <CircleOutlined color="primary" />}
+                        <Typography>{option.answer}</Typography>
+                      </Box>
+                    </Grid>
+                  ))}
+                  <Divider sx={{ marginTop: 2 }} />
+                  <Typography>{question.explaination}</Typography>
+                </Grid>
+              </Paper>
+            ))}
+            {/* ) : (
               <Skeleton />
-            )}
+            )} */}
           </Stack>
         </Grid>
       </Grid>

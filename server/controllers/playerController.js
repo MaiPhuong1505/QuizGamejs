@@ -14,7 +14,7 @@ const playerController = {
           resolve({ msg: `Player ${nickname} exists in this quiz, please choose another name` });
         } else {
           const newPlayer = await Player.create(data);
-          await GameHistory.findOneAndUpdate({ _id: gameHistoryId }, { $inc: { numberOfPlayers: 1 } });
+          await GameHistory.findOneAndUpdate({ _id: gameHistoryId }, { $inc: { numberOfPlayers: 1 } }, { new: true });
           resolve(newPlayer);
         }
       } catch (error) {

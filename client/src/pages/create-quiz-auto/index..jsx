@@ -29,13 +29,13 @@ const CreateQuizAuto = () => {
   const [quizTitle, setQuizTitle] = useState('');
   const { user } = useSelector((state) => state);
   console.log('user in create auto', user);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleClick = async () => {
     setLoading(true);
     try {
-      const quizzesCheckeds = quizzes.filter((quizze) => quizze.checked);
+      const quizzesCheckeds = quizzes.filter((quiz) => quiz.checked);
       const requirement = quizzesCheckeds.map((quizzesChecked) => ({
         quizId: quizzesChecked?._id,
         numberOfQuestion: quizzesChecked?.numberOfQuestion,
@@ -72,10 +72,18 @@ const CreateQuizAuto = () => {
   }, []);
   console.log('quizzes', quizzes);
 
-  const isCheckALL = quizzes.every((quizze) => quizze?.checked);
+  const isCheckALL = quizzes.every((quiz) => quiz?.checked);
   const setQuizzesChecked = (id) => {
-    const newQuizze = quizzes.map((quizze) => (quizze._id !== id ? quizze : { ...quizze, checked: !quizze?.checked }));
-    setQuizzes(newQuizze);
+    const newQuiz = quizzes.map((quiz) => {
+      if (quiz._id !== id) {
+        return quiz;
+      } else if (quiz.checked) {
+        return { ...quiz, checked: !quiz?.checked, numberOfQuestion: '' };
+      } else {
+        return { ...quiz, checked: !quiz?.checked, numberOfQuestion: '1' };
+      }
+    });
+    setQuizzes(newQuiz);
   };
 
   const setQuizzesCheckedAll = () => {
@@ -87,12 +95,21 @@ const CreateQuizAuto = () => {
   };
 
   const setNumberOfQuestion = (id, number) => {
-    setQuizzes((pre) => pre.map((item) => (item._id !== id ? item : { ...item, numberOfQuestion: number })));
+    setQuizzes((pre) =>
+      pre.map((item) => (item._id !== id ? item : { ...item, checked: true, numberOfQuestion: number })),
+    );
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === '-' || e.key === '.') {
+      e.preventDefault();
+      return;
+    }
   };
 
   return (
-    <Box sx={{ paddingX: '55px', height: '60vh' }}>
-      <Grid container sx={{ height: '100%' }} spacing={5}>
+    <Box>
+      <Grid container sx={{ height: '100%', backgroundColor: 'white', paddingX: '55px' }} spacing={5}>
         <Grid item md={8} sx={{ height: '100%' }}>
           <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
             <Grid item xs={2}>
@@ -134,23 +151,24 @@ const CreateQuizAuto = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {quizzes.map((quizze, index) => (
-                <TableRow key={quizze?.stt} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              {quizzes.map((quiz, index) => (
+                <TableRow key={quiz?.stt} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row" align="center">
-                    <Checkbox checked={!!quizze?.checked} onClick={() => setQuizzesChecked(quizze?._id)} />
+                    <Checkbox checked={!!quiz?.checked} onClick={() => setQuizzesChecked(quiz?._id)} />
                   </TableCell>
                   <TableCell align="center">{++index}</TableCell>
-                  <TableCell align="center">{quizze?.title}</TableCell>
+                  <TableCell align="center">{quiz?.title}</TableCell>
                   <TableCell align="center">
-                    <input
-                      style={{
-                        border: '1px solid  black',
-                        padding: ' 8px 5px',
-                        borderRadius: '5px',
-                        textAlign: 'center',
+                    <TextField
+                      sx={{ textAlign: 'center' }}
+                      size="small"
+                      type="number"
+                      value={quiz.numberOfQuestion}
+                      onChange={(e) => setNumberOfQuestion(quiz?._id, e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      inputProps={{
+                        style: { appearance: 'none' },
                       }}
-                      value={quizze.numberOfQuestion}
-                      onChange={(e) => setNumberOfQuestion(quizze?._id, e.target.value)}
                     />
                   </TableCell>
                 </TableRow>
@@ -158,12 +176,11 @@ const CreateQuizAuto = () => {
             </TableBody>
           </Table>
         </Grid>
-        <Grid item md={4} sx={{ marginY: '100px' }}>
+        <Grid item md={4} sx={{ marginY: '80px' }}>
           <Card
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              height: ' 100%',
               justifyContent: 'space-between',
               padding: '2px 22px',
               boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',

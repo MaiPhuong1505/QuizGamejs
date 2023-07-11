@@ -1,6 +1,6 @@
 import { ListAlt } from '@mui/icons-material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography, IconButton } from '@mui/material';
 import { default as React, useEffect, useState } from 'react';
 import './style.scss';
 import Dialog from '@mui/material/Dialog';
@@ -16,11 +16,12 @@ const FlashCardContent = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state);
 
-  const [flipped, setFlipped] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const [open, setOpen] = useState(false);
   const [flashcard, setFlashcard] = useState({});
+  const [cardContentList, setCardContentList] = useState([]);
   const [currentCard, setCurrentCard] = useState({});
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [currentCardIndex, setCurrentCardIndex] = useState(-1);
 
   const handleClick = () => {
     setFlipped(!flipped);
@@ -41,8 +42,6 @@ const FlashCardContent = () => {
         const response = await quizServices.getFlashcardById(id, user?.token);
         if (response?.data) {
           setFlashcard(response?.data?.flashcard);
-          setCurrentCardIndex(0);
-          setCurrentCard(response?.data?.flashcard?.question[0]);
           console.log('response?.data?.flashcard', response?.data?.flashcard);
         }
       } catch (error) {
@@ -53,6 +52,28 @@ const FlashCardContent = () => {
       getFlashcardContent();
     }
   }, []);
+  useEffect(() => {
+    if (flashcard.questions) {
+      setCurrentCardIndex(0);
+      setCardContentList(flashcard.questions);
+    }
+    // setCurrentCard(flashcard?.questions[0]);
+  }, [flashcard]);
+  useEffect(() => {
+    setCurrentCard(cardContentList[currentCardIndex]);
+    console.log('setCurrentCard');
+  }, [currentCardIndex]);
+
+  const handleToPrevious = () => {
+    if (currentCardIndex > 0) {
+      setCurrentCardIndex((prev) => prev - 1);
+    }
+  };
+  const handleToNext = () => {
+    if (currentCardIndex < cardContentList.length - 1) {
+      setCurrentCardIndex((prev) => prev + 1);
+    }
+  };
   return (
     <>
       <Box className="flash-card-content">
@@ -67,15 +88,16 @@ const FlashCardContent = () => {
             <div className={`card ${flipped ? 'is-flipped' : ''}`}>
               <div className="card__face card__face--front">
                 <div className="card__face--content">
-                  {currentCard.question}
+                  <Typography variant="h6">{currentCard?.question}</Typography>
+                  {console.log('currentCard?.answerOptions?.map', currentCard?.answerOptions)}
                   {currentCard?.answerOptions?.map((answer, index) => (
-                    <Typography>
+                    <Typography variant="h6" key={index}>
                       {index + 1}. {answer.answer}
                     </Typography>
                   ))}
                 </div>
                 <div className="card__face--footer">
-                  <Typography style={{ color: '#00B8F1' }} variant="h5">
+                  <Typography style={{ color: '#00B8F1' }} variant="subtitle1">
                     Click the card to flip
                   </Typography>
                 </div>
@@ -84,16 +106,19 @@ const FlashCardContent = () => {
                 <div className="card__face card__face--front">
                   <div className="card__face--content">
                     {currentCard?.answerOptions?.map((answer, index) => {
-                      if (answer.isCorrect)
+                      if (answer.isCorrect) {
                         return (
-                          <Typography>
+                          <Typography variant="h4" sx={{ textAlign: 'center' }}>
                             {index + 1}. {answer.answer}
                           </Typography>
                         );
+                      } else return;
                     })}
+                    {console.log('currentCard?.answerOptions)', currentCard?.answerOptions)}
+                    {/* {getCorrectAnswer(currentCard?.answerOptions)} */}
                   </div>
                   <div className="card__face--footer">
-                    {currentCard.explaination && (
+                    {currentCard?.explaination && (
                       <Button
                         variant="contained"
                         className="card__face--btn"
@@ -115,11 +140,15 @@ const FlashCardContent = () => {
         ;
         <Grid className="next__card">
           <Grid className="next__card-inner">
-            <ArrowBackIos className="next__card-icon" />
+            <IconButton className="next__card-icon" onClick={handleToPrevious}>
+              <ArrowBackIos />
+            </IconButton>
             <Typography className="next__card-text" variant="h5">
-              {currentCardIndex + 1} / {flashcard.questions.length}
+              {currentCardIndex + 1} / {cardContentList?.length}
             </Typography>
-            <ArrowForwardIos className="next__card-icon" />
+            <IconButton className="next__card-icon" onClick={handleToNext}>
+              <ArrowForwardIos />
+            </IconButton>
           </Grid>
         </Grid>
         ;

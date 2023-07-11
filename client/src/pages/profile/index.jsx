@@ -50,7 +50,7 @@ const Profile = () => {
               <Button variant="contained" endIcon={<Style />} onClick={() => navigate('/flashcard')}>
                 View all flashcards
               </Button>
-              <Button variant="contained" endIcon={<History />}>
+              <Button variant="contained" endIcon={<History />} onClick={() => navigate('/viewHistory')}>
                 View all results
               </Button>
             </Stack>

@@ -25,6 +25,7 @@ import { useSelector } from 'react-redux';
 import { QUESTION_DIFFICULTY } from '../../utils/constants';
 
 const CreateQuestion = () => {
+  const { quizReducer } = useSelector((state) => state);
   const initialAnswersState = [
     { answer: '', isCorrect: false },
     { answer: '', isCorrect: false },
@@ -33,6 +34,7 @@ const CreateQuestion = () => {
   ];
   const [questionData, setQuestionData] = useState({});
   const [questionContent, setQuestionContent] = useState('');
+  const [explaination, setExplaination] = useState('');
   const [difficulty, setDifficulty] = useState(QUESTION_DIFFICULTY.EASY);
   const [time, setTime] = useState(20);
   const [notifyText, setNotifyText] = useState('');
@@ -123,13 +125,21 @@ const CreateQuestion = () => {
       setNotifyText('Please select correct answers');
       return;
     }
-    const sendData = { questionContent, multiple, imageURL, time, difficulty, answerOptions: newAnswerOption };
+    const sendData = {
+      question: questionContent,
+      multiple,
+      imageURL,
+      time,
+      difficulty,
+      answerOptions: newAnswerOption,
+      quiz: quizReducer.storeQuiz._id,
+    };
 
     console.log('answerOptions in create question', answerOptions);
     console.log('sendData in create question', sendData);
     const response = await quizServices.createQuestion(sendData, user?.token);
-    if (response.data) {
-      navigate('');
+    if (response.data.insertedQuestion) {
+      navigate(`/quiz/${quizReducer.storeQuiz._id}`);
     }
   };
 
@@ -243,6 +253,17 @@ const CreateQuestion = () => {
                 </Grid>
               ))}
             </Grid>
+            <Typography>Explaination</Typography>
+            <TextField
+              fullWidth
+              margin="dense"
+              type={'text'}
+              variant="outlined"
+              placeholder="Explaination for the question"
+              multiline
+              rows={3}
+              onChange={(e) => setExplaination(e.target.value)}
+            />
             <Divider sx={{ marginY: 2 }} />
             <Typography color={'error'}>{notifyText}</Typography>
             <Box

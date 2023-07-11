@@ -47,12 +47,36 @@ const gameHistoryController = {
   //     console.log('newGameHistory', error.message);
   //   }
   // },
+  // getAllGameHistories: async (req, res) => {
+  //   try {
+  //     const allGameHistories = await GameHistory.find({ hostId: req.params.userId }).exec();
+  //     console.log('allGameHistories in controller', allGameHistories);
+  //     const sentData = allGameHistories.map(async (history) => {
+  //       const foundQuiz = await Quiz.findOne({ _id: history.quizId }).exec();
+  //       return { ...history, quizTitle: foundQuiz.title };
+  //     });
+  //     // const sentData = { ...allGameHistories._doc, quizTitle: foundQuiz.title };
+  //     res.json({
+  //       msg: `All game hosted by userId ${req.params.userId}`,
+  //       gameHistoryList: sentData,
+  //     });
+  //   } catch (error) {
+  //     return res.status(500).json({ msg: error.message });
+  //   }
+  // },
   getAllGameHistories: async (req, res) => {
     try {
-      const allGameHistories = await GameHistory.find({ hostId: req.body.user });
+      const allGameHistories = await GameHistory.find({ hostId: req.params.userId }).exec();
+      console.log('allGameHistories in controller', allGameHistories);
+      const sentData = await Promise.all(
+        allGameHistories.map(async (history) => {
+          const foundQuiz = await Quiz.findOne({ _id: history.quizId }).exec();
+          return { ...history._doc, quizTitle: foundQuiz.title };
+        }),
+      );
       res.json({
-        msg: `All game hosted by userId ${req.body.user}`,
-        allGameHistories,
+        msg: `All game hosted by userId ${req.params.userId}`,
+        gameHistoryList: sentData,
       });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
@@ -69,5 +93,12 @@ const gameHistoryController = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  // deleteAll: async (req, res) => {
+  //   try {
+  //     await GameHistory.deleteMany({});
+  //   } catch (error) {
+  //     return res.status(500).json({ msg: error.message });
+  //   }
+  // },
 };
 export default gameHistoryController;

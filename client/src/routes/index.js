@@ -31,8 +31,8 @@ const publicRoutes = [
   { path: '/createQuestion', component: CreateQuestion },
   { path: '/updateQuestion/:id', component: UpdateQuestion },
   { path: '/flashcardContent/:id', component: FlashCardContent },
-  { path: '/viewHistory', component: ViewHistory, layout: null },
-  { path: '/historyDetail/:id', component: ViewHistoryDetail, layout: null },
+  { path: '/viewHistory', component: ViewHistory },
+  { path: '/historyDetail/:id', component: ViewHistoryDetail },
 ];
 
 const privateRoutes = [];

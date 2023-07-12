@@ -13,7 +13,7 @@ import historyRouter from './routes/historyRouter.js';
 // import cookieParser from 'cookie-parser';
 const domain = process.env.DOMAIN || 'http://localhost:3000';
 const corsOptions = {
-  origin: '*',
+  origin: [domain],
 };
 const app = express();
 
